@@ -4,4 +4,14 @@
     <string name="app_city">Город: </string>
     <string name="app_city_name">Москва</string>
     <string name="app_temp">Tемпература:</string>
+    <string name="app_wind_speed">скорость ветра</string>
+    <string name="app_pressure">давление</string>
+
+    <string name="app_city_Moscow">Москва</string>
+    <string name="app_city_London">Лондон</string>
+    <string name="app_city_Berlin">Берлин</string>
+    <string name="app_city_Paris">Париж</string>
+    <string name="app_city_Stockholm">Стокгольм</string>
+
+    <string name="app_btn_select_city">выбрать город</string>
 </resources>

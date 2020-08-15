@@ -3,4 +3,15 @@
     <string name="app_city">City:</string>
     <string name="app_city_name">Moscow</string>
     <string name="app_temp">Temperature:</string>
+    <string name="app_wind_speed">wind speed</string>
+    <string name="app_pressure">pressure</string>
+
+    <string name="app_city_Moscow">Moscow</string>
+    <string name="app_city_London">London</string>
+    <string name="app_city_Berlin">Berlin</string>
+    <string name="app_city_Paris">Paris</string>
+    <string name="app_city_Stockholm">Stockholm</string>
+
+    <string name="app_btn_select_city">select sity</string>
+
 </resources>
