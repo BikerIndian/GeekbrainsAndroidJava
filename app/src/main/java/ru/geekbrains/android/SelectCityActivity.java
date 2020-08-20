@@ -1,15 +1,29 @@
 package ru.geekbrains.android;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
-import androidx.annotation.Nullable;
-
-public class SelectCityActivity extends Activity {
+public class SelectCityActivity extends AppCompatActivity {
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_city);
+        setButton();
+
+    }
+
+    private void setButton() {
+
+        // OK
+        findViewById(R.id.select_city_button_ok).setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        }));
     }
 
 }

@@ -13,7 +13,7 @@
         android:layout_height="734dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
@@ -79,7 +79,22 @@
         android:text="@string/app_btn_select_city"
         app:layout_constraintEnd_toEndOf="@+id/linearLayout"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        style="@style/RoundedCornerButton"/>
+
+
+    <Button
+        android:id="@+id/button_LifeCycle"
+        android:layout_width="103dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="20dp"
+        android:text="Life Cycle"
+        app:layout_constraintEnd_toEndOf="@+id/button"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/button"
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        tools:ignore="MissingConstraints"
+        style="@style/RoundedCornerButton"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
