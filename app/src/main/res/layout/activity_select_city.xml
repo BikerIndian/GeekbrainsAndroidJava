@@ -9,45 +9,45 @@
     tools:context=".SelectCityActivity">
 
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/select_city_check_wind_speed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:text="@string/app_wind_speed"
-        app:layout_constraintEnd_toStartOf="@+id/checkBox2"
+        app:layout_constraintEnd_toStartOf="@+id/select_city_check_pressure"
         app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
     <CheckBox
-        android:id="@+id/checkBox2"
+        android:id="@+id/select_city_check_pressure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="112dp"
         android:text="@string/app_pressure"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/checkBox"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/select_city_check_wind_speed"
         tools:ignore="MissingConstraints" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/select_city_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox2"
+        app:layout_constraintTop_toBottomOf="@+id/select_city_check_wind_speed"
         tools:ignore="MissingConstraints">
 
 
     </EditText>
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
         android:scrollbars="none"
@@ -55,7 +55,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText"
+        app:layout_constraintTop_toBottomOf="@+id/select_city_editText"
         app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
@@ -65,43 +65,52 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/select_city_TextView_city"
+                android:id="@+id/select_city_TextView_city1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/app_city_Moscow"
-                android:textSize="30dp"/>
+                android:textSize="30dp" />
 
             <TextView
+                android:id="@+id/select_city_TextView_city2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/app_city_London"
-                android:textSize="30dp"/>
+                android:textSize="30dp" />
+
             <TextView
+                android:id="@+id/select_city_TextView_city3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/app_city_Berlin"
-                android:textSize="30dp"/>
+                android:textSize="30dp" />
+
             <TextView
+                android:id="@+id/select_city_TextView_city4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/app_city_Paris"
-                android:textSize="30dp"/>
+                android:textSize="30dp" />
+
             <TextView
+                android:id="@+id/select_city_TextView_city5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/app_city_Stockholm"
-                android:textSize="30dp"/>
+                android:textSize="30dp" />
 
         </LinearLayout>
     </ScrollView>
 
     <Button
         android:id="@+id/select_city_button_ok"
+        style="@style/RoundedCornerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
         android:text="Ok"
-        tools:layout_editor_absoluteX="308dp"
-        tools:layout_editor_absoluteY="363dp"
-        tools:ignore="MissingConstraints"
-        style="@style/RoundedCornerButton"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
+        tools:ignore="MissingConstraints" />
 </androidx.constraintlayout.widget.ConstraintLayout>
