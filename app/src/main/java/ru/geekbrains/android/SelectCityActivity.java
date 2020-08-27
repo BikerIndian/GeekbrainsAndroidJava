@@ -1,67 +1,62 @@
 package ru.geekbrains.android;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class SelectCityActivity extends AppCompatActivity {
 
     CheckBox checkWindSpeed;
     CheckBox checkPressure;
-    String city="";
     TextView editCity;
+
+    SelectCity selectCity;
+    CitiesFragment citiesFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        selectCity = new SelectCity();
+
         setContentView(R.layout.activity_select_city);
 
         checkWindSpeed = findViewById(R.id.select_city_check_wind_speed);
         checkPressure = findViewById(R.id.select_city_check_pressure);
         editCity = findViewById(R.id.select_city_editText);
 
-
-        SelectCity selectCity = (SelectCity) getIntent().getSerializableExtra(Keys.SELECT_CITY);
+        SelectCity selectCity = (SelectCity) getIntent().getSerializableExtra(SelectCity.SELECT_CITY);
 
         if (selectCity != null) {
             checkWindSpeed.setChecked(selectCity.isWindSpeed());
             checkPressure.setChecked(selectCity.isPressure());
         }
 
-
-
         setButton();
         setSelectCity();
-        //android:id="@+id/select_city_TextView_city5"
 
     }
 
     private void setSelectCity() {
-        findViewById(R.id.select_city_TextView_city1).setOnClickListener(selectCityListener());
-        findViewById(R.id.select_city_TextView_city2).setOnClickListener(selectCityListener());
-        findViewById(R.id.select_city_TextView_city3).setOnClickListener(selectCityListener());
-        findViewById(R.id.select_city_TextView_city4).setOnClickListener(selectCityListener());
-        findViewById(R.id.select_city_TextView_city5).setOnClickListener(selectCityListener());
+
+        // Проверим, что фрагмент существует в activity
+        if (getSupportFragmentManager().findFragmentById(R.id.select_city_frame) == null) {
+            citiesFragment = new CitiesFragment();
+            // Добавим фрагмент на activity
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.select_city_frame, citiesFragment)
+                    .commit();
+
+        } else {
+            citiesFragment = (CitiesFragment) getSupportFragmentManager().findFragmentById(R.id.select_city_frame);
+        }
+
     }
-
-    private OnClickListener selectCityListener(){
-
-        OnClickListener selectCityListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TextView textView  = findViewById(v.getId());
-                city = ""+textView.getText();
-                editCity.setText(city);
-            }
-        };
-        return selectCityListener;
-    }
-
 
 
     private void setButton() {
@@ -71,19 +66,48 @@ public class SelectCityActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                SelectCity selectCity = new SelectCity();
+                save();
 
-                selectCity.setPressure(checkPressure.isChecked());
-                selectCity.setWindSpeed(checkWindSpeed.isChecked());
-                selectCity.setCity(city);
-
-
+                // Передача данных в main
                 Intent intentResult = new Intent();
-                intentResult.putExtra(Keys.SELECT_CITY, selectCity);
-                setResult(RESULT_OK , intentResult);
+                intentResult.putExtra(SelectCity.SELECT_CITY, selectCity);
+                setResult(RESULT_OK, intentResult);
+
                 finish();
             }
         }));
+    }
+
+    private void save() {
+        selectCity.setPressure(checkPressure.isChecked());
+        selectCity.setWindSpeed(checkWindSpeed.isChecked());
+        String city = citiesFragment.getArguments().getString(CitiesFragment.CITY_ID);
+        int num_city = citiesFragment.getArguments().getInt(CitiesFragment.NUM_CITY_ID);
+
+        if (0  < num_city) {
+            selectCity.setNum_city(num_city);
+        }
+
+        if (city != null) {
+            selectCity.setCity(city);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle saveInstanceState) {
+        super.onRestoreInstanceState(saveInstanceState);
+
+        if (saveInstanceState != null && saveInstanceState.get(SelectCity.SELECT_CITY) instanceof SelectCity) {
+            selectCity = (SelectCity) saveInstanceState.get(SelectCity.SELECT_CITY);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle saveInstanceState) {
+        super.onSaveInstanceState(saveInstanceState);
+        save();
+        saveInstanceState.putSerializable(SelectCity.SELECT_CITY, selectCity);
+
     }
 
 }

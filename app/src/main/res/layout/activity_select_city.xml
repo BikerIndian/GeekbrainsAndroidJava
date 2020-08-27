@@ -8,6 +8,8 @@
     android:background="@color/select_city"
     tools:context=".SelectCityActivity">
 
+
+
     <CheckBox
         android:id="@+id/select_city_check_wind_speed"
         android:layout_width="wrap_content"
@@ -29,6 +31,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/select_city_check_wind_speed"
         tools:ignore="MissingConstraints" />
+
+
+    <FrameLayout
+        android:id="@+id/select_city_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
+        tools:ignore="Instantiatable,MissingConstraints" />
 
     <EditText
         android:id="@+id/select_city_editText"
@@ -58,48 +72,7 @@
         app:layout_constraintTop_toBottomOf="@+id/select_city_editText"
         app:layout_constraintVertical_bias="0.0">
 
-        <LinearLayout
-            android:id="@+id/listCity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/select_city_TextView_city1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_city_Moscow"
-                android:textSize="30dp" />
-
-            <TextView
-                android:id="@+id/select_city_TextView_city2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_city_London"
-                android:textSize="30dp" />
-
-            <TextView
-                android:id="@+id/select_city_TextView_city3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_city_Berlin"
-                android:textSize="30dp" />
-
-            <TextView
-                android:id="@+id/select_city_TextView_city4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_city_Paris"
-                android:textSize="30dp" />
-
-            <TextView
-                android:id="@+id/select_city_TextView_city5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_city_Stockholm"
-                android:textSize="30dp" />
-
-        </LinearLayout>
     </ScrollView>
 
     <Button
@@ -107,10 +80,10 @@
         style="@style/RoundedCornerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="32dp"
         android:text="Ok"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
+        app:layout_constraintTop_toBottomOf="@+id/cities"
         tools:ignore="MissingConstraints" />
 </androidx.constraintlayout.widget.ConstraintLayout>

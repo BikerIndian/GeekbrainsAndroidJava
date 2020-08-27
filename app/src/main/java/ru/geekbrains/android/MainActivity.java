@@ -1,13 +1,12 @@
 package ru.geekbrains.android;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,13 +28,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult( int requestCode, int resultCode, Intent data) {
 
-        if (requestCode != Keys.SELECT_CITY_REQUEST ) {
+        if (requestCode != SelectCity.SELECT_CITY_REQUEST ) {
             super .onActivityResult(requestCode, resultCode, data);
             return ;
         }
 
         if (resultCode == RESULT_OK) {
-            this.selectCity =  (SelectCity) data.getSerializableExtra(Keys.SELECT_CITY);
+            this.selectCity =  (SelectCity) data.getSerializableExtra(SelectCity.SELECT_CITY);
             this.city.setText(this.selectCity.getCity());
         }
 
@@ -54,9 +53,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SelectCityActivity.class);
-                intent.putExtra(Keys.SELECT_CITY,selectCity);
+                intent.putExtra(SelectCity.SELECT_CITY,selectCity);
 
-                startActivityForResult(intent,Keys.SELECT_CITY_REQUEST);
+                startActivityForResult(intent,SelectCity.SELECT_CITY_REQUEST);
             }
         });
 

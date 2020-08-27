@@ -14,4 +14,13 @@
 
     <string name="app_btn_select_city">select sity</string>
 
+    <string-array name="cities">
+        <item>Moscow</item>
+        <item>London</item>
+        <item>Berlin</item>
+        <item>Paris</item>
+        <item>Stockholm</item>
+    </string-array>
+
+
 </resources>

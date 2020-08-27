@@ -14,4 +14,14 @@
     <string name="app_city_Stockholm">Стокгольм</string>
 
     <string name="app_btn_select_city">выбрать город</string>
+
+
+    <string-array name="cities">
+        <item>Москва</item>
+        <item>Лондон</item>
+        <item>Берлин</item>
+        <item>Париж</item>
+        <item>Стокгольм</item>
+    </string-array>
+
 </resources>
