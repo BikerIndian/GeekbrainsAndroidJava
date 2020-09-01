@@ -2,6 +2,7 @@ package ru.geekbrains.android;
 
 public final class BaseVirtual {
 
+
     private static final BaseVirtual instance = new BaseVirtual();
     private static final Object syncObj = new Object();
 

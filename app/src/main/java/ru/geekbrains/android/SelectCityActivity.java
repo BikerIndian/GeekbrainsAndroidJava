@@ -81,16 +81,13 @@ public class SelectCityActivity extends AppCompatActivity {
     private void save() {
         selectCity.setPressure(checkPressure.isChecked());
         selectCity.setWindSpeed(checkWindSpeed.isChecked());
-        String city = citiesFragment.getArguments().getString(CitiesFragment.CITY_ID);
-        int num_city = citiesFragment.getArguments().getInt(CitiesFragment.NUM_CITY_ID);
-
-        if (0  < num_city) {
+        if (editCity.getText().length() > 0) {
+            String city = citiesFragment.getArguments().getString(CitiesFragment.CITY_ID);
+            selectCity.setCity(city);
+            int num_city = citiesFragment.getArguments().getInt(CitiesFragment.NUM_CITY_ID);
             selectCity.setNum_city(num_city);
         }
 
-        if (city != null) {
-            selectCity.setCity(city);
-        }
     }
 
     @Override

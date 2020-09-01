@@ -7,11 +7,22 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
+import ru.geekbrains.android.listDayOfWeek.DataDayOfWeek;
+import ru.geekbrains.android.listDayOfWeek.DayOfWeek;
+import ru.geekbrains.android.listDayOfWeek.ListDayOfWeekAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
     private  SelectCity selectCity;
     TextView city;
+
+    // Адаптер для списка погоды на неделю
+    final ListDayOfWeekAdapter adapter = new ListDayOfWeekAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +33,23 @@ public class MainActivity extends AppCompatActivity {
         setDefaultTemp();
         setBtn();
         this.selectCity = new SelectCity();
+
+        initRecyclerView();
+
+    }
+
+    private void initRecyclerView() {
+        final RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        // Эта установка служит для повышения производительности системы
+        recyclerView.setHasFixedSize(true);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        recyclerView.setAdapter(adapter);
+
+        updateCities(new DataDayOfWeek().getListData());
+    }
+    public void updateCities(List<DayOfWeek> listDayOfWeek) {
+        adapter.update(listDayOfWeek);
     }
 
 
