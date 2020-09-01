@@ -1,12 +1,15 @@
 package ru.geekbrains.android;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     // Адаптер для списка погоды на неделю
     final ListDayOfWeekAdapter adapter = new ListDayOfWeekAdapter();
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initRecyclerView() {
         final RecyclerView recyclerView = findViewById(R.id.recyclerView);
         // Эта установка служит для повышения производительности системы
@@ -47,6 +52,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         updateCities(new DataDayOfWeek().getListData());
+
+        // Декоратор
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
+        itemDecoration.setDrawable(getDrawable(R.drawable.separator));
+        recyclerView.addItemDecoration(itemDecoration);
+
     }
     public void updateCities(List<DayOfWeek> listDayOfWeek) {
         adapter.update(listDayOfWeek);
