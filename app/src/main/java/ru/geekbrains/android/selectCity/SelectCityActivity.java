@@ -1,4 +1,4 @@
-package ru.geekbrains.android;
+package ru.geekbrains.android.selectCity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +7,10 @@ import android.widget.CheckBox;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
+
+import ru.geekbrains.android.R;
 
 public class SelectCityActivity extends AppCompatActivity {
 
@@ -20,6 +23,7 @@ public class SelectCityActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
         selectCity = new SelectCity();
@@ -39,6 +43,10 @@ public class SelectCityActivity extends AppCompatActivity {
 
         setButton();
         setSelectCity();
+
+        // Обработчик BottomBar
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView.setOnNavigationItemSelectedListener(new BottomNavigation(this));
 
     }
 
@@ -77,6 +85,10 @@ public class SelectCityActivity extends AppCompatActivity {
                 finish();
             }
         }));
+
+
+        // Скрыли
+        findViewById(R.id.select_city_button_ok).setVisibility(View.GONE);
     }
 
     private void save() {

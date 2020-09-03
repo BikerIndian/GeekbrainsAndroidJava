@@ -1,4 +1,4 @@
-package ru.geekbrains.android;
+package ru.geekbrains.android.selectCity;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,10 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import ru.geekbrains.android.R;
+
 // Фрагмент выбора города из списка
 public class CitiesFragment extends Fragment {
-    public static final String CITY_ID = "ru.geekbrains.android.CitiesFragment.city";
-    public static final String NUM_CITY_ID = "ru.geekbrains.android.CitiesFragment.num";
+    public static final String CITY_ID = "ru.geekbrains.android.selectCity.CitiesFragment.city";
+    public static final String NUM_CITY_ID = "ru.geekbrains.android.selectCity.CitiesFragment.num";
     private String city="";
     private int num_city=0;
 

@@ -18,10 +18,12 @@ import java.util.List;
 import ru.geekbrains.android.listDayOfWeek.DataDayOfWeek;
 import ru.geekbrains.android.listDayOfWeek.DayOfWeek;
 import ru.geekbrains.android.listDayOfWeek.ListDayOfWeekAdapter;
+import ru.geekbrains.android.selectCity.SelectCity;
+import ru.geekbrains.android.selectCity.SelectCityActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private  SelectCity selectCity;
+    private SelectCity selectCity;
     TextView city;
 
     // Адаптер для списка погоды на неделю

@@ -1,4 +1,4 @@
-package ru.geekbrains.android;
+package ru.geekbrains.android.selectCity;
 
 import java.io.Serializable;
 
