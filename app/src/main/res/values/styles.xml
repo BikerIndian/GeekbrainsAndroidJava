@@ -12,4 +12,8 @@
         <item name="colorButtonNormal">#1a237e</item>
         <item name="colorControlHighlight">#673ab7</item>
     </style>
+
+    <style name="FormButton" parent="Theme.MaterialComponents">
+        <item name="colorPrimary">@android:color/holo_orange_dark</item>
+    </style>
 </resources>

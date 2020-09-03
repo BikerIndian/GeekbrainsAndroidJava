@@ -87,7 +87,7 @@ public class SelectCityActivity extends AppCompatActivity {
         }));
 
 
-        // Скрыли
+        // убрать кнопку
         findViewById(R.id.select_city_button_ok).setVisibility(View.GONE);
     }
 

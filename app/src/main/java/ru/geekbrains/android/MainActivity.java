@@ -110,11 +110,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, LifeCycle.class));
             }
         });
+        // убрать кнопку
+        findViewById(R.id.button_LifeCycle).setVisibility(View.GONE);
     }
 
     private void setDefaultTemp() {
         TextView textTemp = findViewById(R.id.text_temp);
-        textTemp.setText("24");
+        textTemp.setText("24°");
     }
 
 }
