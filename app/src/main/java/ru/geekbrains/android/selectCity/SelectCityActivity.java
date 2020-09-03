@@ -74,15 +74,8 @@ public class SelectCityActivity extends AppCompatActivity {
         findViewById(R.id.select_city_button_ok).setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                returnMain();
 
-                save();
-
-                // Передача данных в main
-                Intent intentResult = new Intent();
-                intentResult.putExtra(SelectCity.SELECT_CITY, selectCity);
-                setResult(RESULT_OK, intentResult);
-
-                finish();
             }
         }));
 
@@ -91,6 +84,16 @@ public class SelectCityActivity extends AppCompatActivity {
         findViewById(R.id.select_city_button_ok).setVisibility(View.GONE);
     }
 
+    public void returnMain(){
+        save();
+
+        // Передача данных в main
+        Intent intentResult = new Intent();
+        intentResult.putExtra(SelectCity.SELECT_CITY, selectCity);
+        setResult(RESULT_OK, intentResult);
+
+        finish();
+    }
     private void save() {
         selectCity.setPressure(checkPressure.isChecked());
         selectCity.setWindSpeed(checkWindSpeed.isChecked());
