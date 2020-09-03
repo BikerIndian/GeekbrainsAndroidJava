@@ -44,19 +44,26 @@
         app:layout_constraintTop_toBottomOf="@+id/scrollView2"
         tools:ignore="Instantiatable,MissingConstraints" />
 
-    <EditText
-        android:id="@+id/select_city_editText"
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/citySearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:errorEnabled="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/select_city_check_wind_speed"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingClass">
 
-
-    </EditText>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/select_city_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/select_city_search"
+            android:inputType="textPersonName" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -69,7 +76,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/select_city_editText"
+        app:layout_constraintTop_toBottomOf="@+id/citySearch"
         app:layout_constraintVertical_bias="0.0">
 
 
@@ -80,10 +87,13 @@
         style="@style/RoundedCornerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
         android:layout_marginEnd="32dp"
         android:text="Ok"
+        app:layout_constraintBottom_toBottomOf="@+id/select_city_check_pressure"
+
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cities"
+        app:layout_constraintHorizontal_bias="0.619"
+        app:layout_constraintStart_toEndOf="@+id/select_city_check_pressure"
+        app:layout_constraintTop_toTopOf="@+id/select_city_check_pressure"
         tools:ignore="MissingConstraints" />
 </androidx.constraintlayout.widget.ConstraintLayout>

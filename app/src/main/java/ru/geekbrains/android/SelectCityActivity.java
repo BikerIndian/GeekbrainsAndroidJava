@@ -4,15 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 public class SelectCityActivity extends AppCompatActivity {
 
     CheckBox checkWindSpeed;
     CheckBox checkPressure;
-    TextView editCity;
+    TextInputEditText editCity;
 
     SelectCity selectCity;
     CitiesFragment citiesFragment;
@@ -81,7 +82,8 @@ public class SelectCityActivity extends AppCompatActivity {
     private void save() {
         selectCity.setPressure(checkPressure.isChecked());
         selectCity.setWindSpeed(checkWindSpeed.isChecked());
-        if (editCity.getText().length() > 0) {
+
+        if (editCity.getText().length() > 0 && citiesFragment.getArguments() != null) {
             String city = citiesFragment.getArguments().getString(CitiesFragment.CITY_ID);
             selectCity.setCity(city);
             int num_city = citiesFragment.getArguments().getInt(CitiesFragment.NUM_CITY_ID);

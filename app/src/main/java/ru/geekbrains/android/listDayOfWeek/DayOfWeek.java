@@ -11,7 +11,7 @@ public class DayOfWeek {
         this.nameDayOfWeek = nameDayOfWeek;
         this.imageId = imageId;
         this.humidity = humidity;
-        this.temperature = temperature;
+        this.temperature = temperature+"°";
     }
 
     public String getNameDayOfWeek() {
