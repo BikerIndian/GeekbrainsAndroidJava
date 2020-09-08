@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -126,10 +127,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void updateCityWeather(WeatherRequest cityWeather) {
+
+        if (cityWeather == null) {
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "Данные с сервера не пришли", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
        city.setText(cityWeather.getName());
        textTemp.setText(String.format("%.0f°", cityWeather.getMain().getTemp()));
-
-      //  cityWeather.getName();
 
 //        pressure.setText(String.format("%d", cityWeather.getMain().getPressure()));
 //        humidity.setText(String.format("%d", cityWeather.getMain().getHumidity()));
