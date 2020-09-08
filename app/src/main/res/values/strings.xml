@@ -17,10 +17,13 @@
 
     <string-array name="cities">
         <item>Moscow</item>
-        <item>London</item>
-        <item>Berlin</item>
-        <item>Paris</item>
-        <item>Stockholm</item>
+        <item>St. Petersburg</item>
+        <item>Novosibirsk</item>
+        <item>Yekaterinburg</item>
+        <item>Kazan</item>
+        <item>Omsk</item>
+        <item>Nizhniy Novgorod</item>
+        <item>Rostov-na-Donu</item>
     </string-array>
 
 

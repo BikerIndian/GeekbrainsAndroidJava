@@ -70,6 +70,7 @@ public class CitiesFragment extends Fragment {
 
                     TextView editCity = v.getRootView().findViewById(R.id.select_city_editText);
                     CitiesFragment.this.city = getResources().getStringArray(R.array.cities)[fi];
+                    CitiesFragment.this.num_city = fi;
                     editCity.setText(CitiesFragment.this.city);
                     save();
 

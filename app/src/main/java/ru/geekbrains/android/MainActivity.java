@@ -3,6 +3,7 @@ package ru.geekbrains.android;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ import ru.geekbrains.android.selectCity.SelectCityActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    private String DEFAULT_CITY = "Moscow";
     private SelectCity selectCity;
     TextView city;
     private TextView textTemp;
@@ -50,7 +52,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         apiServiceWeather = new Openweathermap(this);
-        apiServiceWeather.getCityWeather("Moscow");
+
+        if (savedInstanceState == null) {
+            apiServiceWeather.getCityWeather(DEFAULT_CITY);
+        }
+
 
         initRecyclerView();
     }
@@ -88,6 +94,9 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             this.selectCity =  (SelectCity) data.getSerializableExtra(SelectCity.SELECT_CITY);
             this.city.setText(this.selectCity.getCity());
+            Log.i("myLogs", "RESULT_OK: "+this.selectCity.getNum_city());
+            String cityENG = new CityENG(this).get(this.selectCity.getNum_city());
+            apiServiceWeather.getCityWeather(cityENG);
         }
 
     }
@@ -134,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
             toast.show();
             return;
         }
-       city.setText(cityWeather.getName());
+     //  city.setText(cityWeather.getName());
        textTemp.setText(String.format("%.0f°", cityWeather.getMain().getTemp()));
 
 //        pressure.setText(String.format("%d", cityWeather.getMain().getPressure()));

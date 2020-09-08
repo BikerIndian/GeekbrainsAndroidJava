@@ -1,7 +1,5 @@
 package ru.geekbrains.android.network;
 
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -28,7 +26,6 @@ public class HttpUtil {
 
 
         } catch (Exception e) {
-            Log.i("myLogs", "request",e);
             e.printStackTrace();
         } finally {
             if (null != urlConnection) {
