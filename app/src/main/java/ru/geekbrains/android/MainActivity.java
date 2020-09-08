@@ -18,6 +18,8 @@ import java.util.List;
 import ru.geekbrains.android.listDayOfWeek.DataDayOfWeek;
 import ru.geekbrains.android.listDayOfWeek.DayOfWeek;
 import ru.geekbrains.android.listDayOfWeek.ListDayOfWeekAdapter;
+import ru.geekbrains.android.network.Openweathermap;
+import ru.geekbrains.android.network.model.WeatherRequest;
 import ru.geekbrains.android.selectCity.SelectCity;
 import ru.geekbrains.android.selectCity.SelectCityActivity;
 
@@ -25,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
     private SelectCity selectCity;
     TextView city;
+    private TextView textTemp;
+    private Openweathermap apiServiceWeather;
+
 
     // Адаптер для списка погоды на неделю
     final ListDayOfWeekAdapter adapter = new ListDayOfWeekAdapter();
@@ -35,13 +40,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         city = findViewById(R.id.main_city);
+        textTemp = findViewById(R.id.text_temp);
+
        // Log.d("myLogs", "onCreate");
-        setDefaultTemp();
+
         setBtn();
         this.selectCity = new SelectCity();
 
-        initRecyclerView();
 
+        apiServiceWeather = new Openweathermap(this);
+        apiServiceWeather.getCityWeather("Moscow");
+
+        initRecyclerView();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -114,9 +124,15 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button_LifeCycle).setVisibility(View.GONE);
     }
 
-    private void setDefaultTemp() {
-        TextView textTemp = findViewById(R.id.text_temp);
-        textTemp.setText("24°");
-    }
 
+    public void updateCityWeather(WeatherRequest cityWeather) {
+       city.setText(cityWeather.getName());
+       textTemp.setText(String.format("%.0f°", cityWeather.getMain().getTemp()));
+
+      //  cityWeather.getName();
+
+//        pressure.setText(String.format("%d", cityWeather.getMain().getPressure()));
+//        humidity.setText(String.format("%d", cityWeather.getMain().getHumidity()));
+//        windSpeed.setText(String.format("%d", cityWeather.getWind().getSpeed()));
+    }
 }
