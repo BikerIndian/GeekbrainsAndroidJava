@@ -2,18 +2,23 @@ package ru.geekbrains.android.selectCity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import ru.geekbrains.android.R;
 
 public class SelectCityActivity extends AppCompatActivity {
-
+    private static final String TAG = "WEATHER";
     CheckBox checkWindSpeed;
     CheckBox checkPressure;
     TextInputEditText editCity;
@@ -48,6 +53,30 @@ public class SelectCityActivity extends AppCompatActivity {
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(new BottomNavigation(this));
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Здесь определяем меню приложения (активити)
+        getMenuInflater().inflate(R.menu.menu, menu);
+        MenuItem search = menu.findItem(R.id.action_search); // поиск пункта меню поиска
+        // Строка поиска
+        final SearchView searchText = (SearchView) search.getActionView();
+        searchText.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            // Реагирует на конец ввода поиска
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Snackbar.make(searchText, query, Snackbar.LENGTH_LONG).show();
+                Log.i(TAG, "search");
+                return true;
+            }
+            // Реагирует на нажатие каждой клавиши
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return true;
+            }
+        });
+        return true;
     }
 
     private void setSelectCity() {

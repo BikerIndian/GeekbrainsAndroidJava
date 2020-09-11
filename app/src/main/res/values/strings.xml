@@ -14,6 +14,7 @@
 
     <string name="app_btn_select_city">select sity</string>
     <string name="select_city_search">city search</string>
+    <string name="search">Search</string>
 
     <string-array name="cities">
         <item>Moscow</item>
