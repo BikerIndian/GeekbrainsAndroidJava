@@ -13,5 +13,18 @@
     <string name="app_city_Stockholm">Stockholm</string>
 
     <string name="app_btn_select_city">select sity</string>
+    <string name="select_city_search">city search</string>
+
+    <string-array name="cities">
+        <item>Moscow</item>
+        <item>St. Petersburg</item>
+        <item>Novosibirsk</item>
+        <item>Yekaterinburg</item>
+        <item>Kazan</item>
+        <item>Omsk</item>
+        <item>Nizhniy Novgorod</item>
+        <item>Rostov-na-Donu</item>
+    </string-array>
+
 
 </resources>
