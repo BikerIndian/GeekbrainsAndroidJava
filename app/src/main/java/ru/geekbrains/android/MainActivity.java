@@ -27,6 +27,7 @@ import ru.geekbrains.android.selectCity.SelectCityActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "WEATHER";
     private String DEFAULT_CITY = "Moscow";
     private SelectCity selectCity;
     TextView city;
@@ -50,13 +51,12 @@ public class MainActivity extends AppCompatActivity {
         setBtn();
         this.selectCity = new SelectCity();
 
-
+        // Получаем данные о погоде с сервера
         apiServiceWeather = new Openweathermap(this);
 
         if (savedInstanceState == null) {
             apiServiceWeather.getCityWeather(DEFAULT_CITY);
         }
-
 
         initRecyclerView();
     }
@@ -143,11 +143,6 @@ public class MainActivity extends AppCompatActivity {
             toast.show();
             return;
         }
-     //  city.setText(cityWeather.getName());
        textTemp.setText(String.format("%.0f°", cityWeather.getMain().getTemp()));
-
-//        pressure.setText(String.format("%d", cityWeather.getMain().getPressure()));
-//        humidity.setText(String.format("%d", cityWeather.getMain().getHumidity()));
-//        windSpeed.setText(String.format("%d", cityWeather.getWind().getSpeed()));
     }
 }
