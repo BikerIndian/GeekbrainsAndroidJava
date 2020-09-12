@@ -10,12 +10,15 @@ import android.widget.CheckBox;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import ru.geekbrains.android.R;
+import ru.geekbrains.android.selectCity.menu.MenuBottom;
+import ru.geekbrains.android.selectCity.menu.MenuDrawer;
 
 public class SelectCityActivity extends AppCompatActivity {
     private static final String TAG = "WEATHER";
@@ -33,7 +36,8 @@ public class SelectCityActivity extends AppCompatActivity {
 
         selectCity = new SelectCity();
 
-        setContentView(R.layout.activity_select_city);
+        // setContentView(R.layout.activity_select_city);
+        setContentView(R.layout.activity_select_city_drawer); // +drawer
 
         checkWindSpeed = findViewById(R.id.select_city_check_wind_speed);
         checkPressure = findViewById(R.id.select_city_check_pressure);
@@ -50,15 +54,26 @@ public class SelectCityActivity extends AppCompatActivity {
         setSelectCity();
 
         // Обработчик BottomBar
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        navView.setOnNavigationItemSelectedListener(new BottomNavigation(this));
+        new MenuBottom(this);
+        //Navigation Drawer — боковое навигационное меню приложения
+        new MenuDrawer(this);
+    }
 
+    // Обработка события по ножатию кнопки возврата
+    // Если Drawer открыт то закрыть
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START))
+            drawer.closeDrawer(GravityCompat.START);
+        else
+            super.onBackPressed();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Здесь определяем меню приложения (активити)
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.menu_bottom, menu);
         MenuItem search = menu.findItem(R.id.action_search); // поиск пункта меню поиска
         // Строка поиска
         final SearchView searchText = (SearchView) search.getActionView();

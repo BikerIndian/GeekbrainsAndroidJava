@@ -1,4 +1,4 @@
-package ru.geekbrains.android.selectCity;
+package ru.geekbrains.android.selectCity.menu;
 
 import android.view.MenuItem;
 
@@ -7,12 +7,19 @@ import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import ru.geekbrains.android.R;
+import ru.geekbrains.android.selectCity.SelectCityActivity;
 
-public class BottomNavigation implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MenuBottom implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     SelectCityActivity activity;
-    public BottomNavigation(SelectCityActivity activity) {
+    public MenuBottom(SelectCityActivity activity) {
         this.activity = activity;
+        init();
+    }
+
+    private void init() {
+        BottomNavigationView navView = activity.findViewById(R.id.nav_view);
+        navView.setOnNavigationItemSelectedListener(this);
     }
 
     @Override
