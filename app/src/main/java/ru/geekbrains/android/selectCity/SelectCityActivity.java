@@ -2,6 +2,7 @@ package ru.geekbrains.android.selectCity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -162,4 +163,8 @@ public class SelectCityActivity extends AppCompatActivity {
 
     }
 
+    public void updateSearch(String searchText) {
+        Log.i(TAG, searchText);
+        citiesFragment.updateCityList(searchText);
+    }
 }

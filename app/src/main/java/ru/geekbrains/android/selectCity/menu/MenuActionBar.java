@@ -1,7 +1,6 @@
 package ru.geekbrains.android.selectCity.menu;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
@@ -30,12 +29,14 @@ public class MenuActionBar {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Snackbar.make(searchText, query, Snackbar.LENGTH_LONG).show();
-                Log.i(TAG, "search");
+                //Log.i(TAG, "search");
 
                 // закрытие клавиатуры
                 InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
+                // обновление окна поиска города
+                activity.updateSearch(query);
                 return true;
             }
             // Реагирует на нажатие каждой клавиши

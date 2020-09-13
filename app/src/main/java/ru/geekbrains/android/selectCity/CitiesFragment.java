@@ -19,6 +19,7 @@ public class CitiesFragment extends Fragment {
     public static final String NUM_CITY_ID = "ru.geekbrains.android.selectCity.CitiesFragment.num";
     private String city="";
     private int num_city=0;
+    private LinearLayout layoutView;
 
     // При создании фрагмента укажем его макет
     @Override
@@ -48,7 +49,18 @@ public class CitiesFragment extends Fragment {
 
     // создаем список городов на экране из массива в ресурсах
     private void initList(View view) {
-        LinearLayout layoutView = (LinearLayout) view;
+        layoutView = (LinearLayout) view;
+        updateCityList("");
+    }
+
+
+    /**
+     * Выводит список городов
+     * @param searchCity
+     */
+    public void updateCityList(String searchCity) {
+        // очистка всех элементов
+        layoutView.removeAllViews();
         String[] cities = getResources().getStringArray(R.array.cities);
 
         // В этом цикле создаем элемент TextView,
@@ -57,26 +69,36 @@ public class CitiesFragment extends Fragment {
         // Кроме того, создаем обработку касания на элемент
         for (int i = 0; i < cities.length; i++) {
             String city = cities[i];
-            TextView tv = new TextView(getContext());
-            tv.setText(city);
-            tv.setTextSize(30);
-            layoutView.addView(tv);
-            final int fi = i;
+            // Добавление города в список
+            if (city.contains(searchCity) || searchCity.equals("") ) {
+                addCity(city,i);
+            }
 
-            tv.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-
-                    TextView editCity = v.getRootView().findViewById(R.id.select_city_editText);
-                    CitiesFragment.this.city = getResources().getStringArray(R.array.cities)[fi];
-                    CitiesFragment.this.num_city = fi;
-                    editCity.setText(CitiesFragment.this.city);
-                    save();
-
-                }
-            });
         }
+
+    }
+
+    private void addCity(String city, int i) {
+
+        TextView tv = new TextView(getContext());
+        tv.setText(city);
+        tv.setTextSize(30);
+        layoutView.addView(tv);
+        final int fi = i;
+
+        tv.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                TextView editCity = v.getRootView().findViewById(R.id.select_city_editText);
+                CitiesFragment.this.city = getResources().getStringArray(R.array.cities)[fi];
+                CitiesFragment.this.num_city = fi;
+                editCity.setText(CitiesFragment.this.city);
+                save();
+
+            }
+        });
     }
 
     private void save() {

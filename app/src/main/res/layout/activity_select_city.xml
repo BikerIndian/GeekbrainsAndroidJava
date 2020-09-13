@@ -75,6 +75,7 @@
             android:id="@+id/select_city_editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:hint="@string/select_city_search"
             android:inputType="textPersonName" />
     </com.google.android.material.textfield.TextInputLayout>
