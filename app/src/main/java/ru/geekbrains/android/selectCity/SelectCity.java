@@ -12,6 +12,7 @@ public class SelectCity implements Serializable {
     private String city;
     private int num_city;
 
+
     public boolean isWindSpeed() {
         return windSpeed;
     }

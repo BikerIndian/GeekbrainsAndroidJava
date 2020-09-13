@@ -11,6 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.util.Map;
+
+import ru.geekbrains.android.BaseVirtual;
 import ru.geekbrains.android.R;
 
 // Фрагмент выбора города из списка
@@ -109,4 +112,20 @@ public class CitiesFragment extends Fragment {
     }
 
 
+    public void updateHistory() {
+        // очистка всех элементов
+        layoutView.removeAllViews();
+
+        Map<String, BaseVirtual.WeatherCity> selectListCity =  BaseVirtual.getSelectListCity();
+        for (Map.Entry<String, BaseVirtual.WeatherCity> entry : selectListCity.entrySet()) {
+
+            TextView tv = new TextView(getContext());
+            String temperature = String.format("%.0f°", entry.getValue().getTemperature());
+            tv.setText(entry.getKey() + " " + temperature);
+            tv.setTextSize(30);
+            layoutView.addView(tv);
+        }
+
+
+    }
 }

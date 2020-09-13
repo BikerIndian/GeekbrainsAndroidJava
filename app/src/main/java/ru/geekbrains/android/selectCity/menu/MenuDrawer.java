@@ -4,7 +4,6 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -15,7 +14,7 @@ import ru.geekbrains.android.R;
 import ru.geekbrains.android.selectCity.SelectCityActivity;
 
 public class MenuDrawer implements NavigationView.OnNavigationItemSelectedListener{
-    AppCompatActivity  activity;
+    SelectCityActivity activity;
     DrawerLayout drawer;
     public MenuDrawer(SelectCityActivity selectCityActivity) {
         activity = selectCityActivity;
@@ -46,6 +45,15 @@ public class MenuDrawer implements NavigationView.OnNavigationItemSelectedListen
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        // !!! switch не использовать так должен выполнится closeDrawer
+        if (id == R.id.nav_list_cities) {
+            activity.updateSearch("");
+        }
+        if (id == R.id.nav_history) {
+            activity.updateHistory();
+        }
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

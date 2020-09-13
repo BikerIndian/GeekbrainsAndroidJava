@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.Map;
 
 import ru.geekbrains.android.listDayOfWeek.DataDayOfWeek;
 import ru.geekbrains.android.listDayOfWeek.DayOfWeek;
@@ -144,5 +145,16 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
        textTemp.setText(String.format("%.0f°", cityWeather.getMain().getTemp()));
+
+        // Сохронение данных по городу
+        Map<String, BaseVirtual.WeatherCity> selectListCity =  BaseVirtual.getSelectListCity();
+
+        if (selectListCity.containsKey(city.getText())) {
+            BaseVirtual.WeatherCity weatherCity = selectListCity.get(city.getText());
+            weatherCity.setTemperature(cityWeather.getMain().getTemp());
+        } else {
+            new BaseVirtual().setCity(city.getText().toString(),cityWeather.getMain().getTemp());
+        }
+       // new BaseVirtual().setCity(city,num_city);
     }
 }

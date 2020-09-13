@@ -167,4 +167,8 @@ public class SelectCityActivity extends AppCompatActivity {
         Log.i(TAG, searchText);
         citiesFragment.updateCityList(searchText);
     }
+
+    public void updateHistory() {
+        citiesFragment.updateHistory();
+    }
 }

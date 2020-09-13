@@ -20,7 +20,8 @@
     <!-- Navigation Drawer -->
     <string name="nav_header_title">Владимир Свищ</string>
     <string name="nav_header_subtitle">5693031@gmail.com</string>
-    <string name="nav_menu_search_history">История поиска</string>
+    <string name="nav_menu_list_cities">Список городов</string>
+    <string name="nav_menu_search_history">История</string>
 
     <string-array name="cities">
         <item>Москва</item>

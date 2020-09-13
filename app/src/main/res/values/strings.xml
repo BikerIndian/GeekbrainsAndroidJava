@@ -18,8 +18,8 @@
     <!-- Navigation Drawer -->
     <string name="nav_header_title">Vladimir Svishch</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_menu_search_history">Search history</string>
-
+    <string name="nav_menu_list_cities">List of cities</string>
+    <string name="nav_menu_search_history">History</string>
 
 
     <string-array name="cities">
