@@ -2,21 +2,19 @@ package ru.geekbrains.android.selectCity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import ru.geekbrains.android.R;
+import ru.geekbrains.android.selectCity.menu.MenuActionBar;
 import ru.geekbrains.android.selectCity.menu.MenuBottom;
 import ru.geekbrains.android.selectCity.menu.MenuDrawer;
 
@@ -29,6 +27,9 @@ public class SelectCityActivity extends AppCompatActivity {
     SelectCity selectCity;
     CitiesFragment citiesFragment;
 
+    MenuBottom menuBottom;
+    MenuActionBar menuActionBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -37,7 +38,7 @@ public class SelectCityActivity extends AppCompatActivity {
         selectCity = new SelectCity();
 
         // setContentView(R.layout.activity_select_city);
-        setContentView(R.layout.activity_select_city_drawer); // +drawer
+        setContentView(R.layout.activity_select_city_drawer); // активити с drawer
 
         checkWindSpeed = findViewById(R.id.select_city_check_wind_speed);
         checkPressure = findViewById(R.id.select_city_check_pressure);
@@ -54,7 +55,8 @@ public class SelectCityActivity extends AppCompatActivity {
         setSelectCity();
 
         // Обработчик BottomBar
-        new MenuBottom(this);
+        menuBottom = new MenuBottom(this);
+        menuActionBar = new MenuActionBar(this);
         //Navigation Drawer — боковое навигационное меню приложения
         new MenuDrawer(this);
     }
@@ -73,26 +75,17 @@ public class SelectCityActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Здесь определяем меню приложения (активити)
-        getMenuInflater().inflate(R.menu.menu_bottom, menu);
-        MenuItem search = menu.findItem(R.id.action_search); // поиск пункта меню поиска
-        // Строка поиска
-        final SearchView searchText = (SearchView) search.getActionView();
-        searchText.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            // Реагирует на конец ввода поиска
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Snackbar.make(searchText, query, Snackbar.LENGTH_LONG).show();
-                Log.i(TAG, "search");
-                return true;
-            }
-            // Реагирует на нажатие каждой клавиши
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return true;
-            }
-        });
+        menuActionBar.createMenu(menu);
         return true;
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Обработка выбора пункта меню приложения (активити)
+        //menuActionBar.selected(item);
+        return super.onOptionsItemSelected(item);
+    }
+
+
 
     private void setSelectCity() {
 
@@ -128,7 +121,7 @@ public class SelectCityActivity extends AppCompatActivity {
         findViewById(R.id.select_city_button_ok).setVisibility(View.GONE);
     }
 
-    public void returnMain(){
+    public void returnMain() {
         save();
 
         // Передача данных в main
@@ -138,6 +131,7 @@ public class SelectCityActivity extends AppCompatActivity {
 
         finish();
     }
+
     private void save() {
         selectCity.setPressure(checkPressure.isChecked());
         selectCity.setWindSpeed(checkWindSpeed.isChecked());

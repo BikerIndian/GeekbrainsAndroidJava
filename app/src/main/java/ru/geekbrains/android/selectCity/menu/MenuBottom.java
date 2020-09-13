@@ -22,6 +22,7 @@ public class MenuBottom implements BottomNavigationView.OnNavigationItemSelected
         navView.setOnNavigationItemSelectedListener(this);
     }
 
+    // обработка событий menu Bottom
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -32,5 +33,7 @@ public class MenuBottom implements BottomNavigationView.OnNavigationItemSelected
         }
         return false;
     }
-  }
+
+
+}
 
