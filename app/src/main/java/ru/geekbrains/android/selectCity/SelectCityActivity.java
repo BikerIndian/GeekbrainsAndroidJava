@@ -2,24 +2,34 @@ package ru.geekbrains.android.selectCity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 
 import ru.geekbrains.android.R;
+import ru.geekbrains.android.selectCity.menu.MenuActionBar;
+import ru.geekbrains.android.selectCity.menu.MenuBottom;
+import ru.geekbrains.android.selectCity.menu.MenuDrawer;
 
 public class SelectCityActivity extends AppCompatActivity {
-
+    private static final String TAG = "WEATHER";
     CheckBox checkWindSpeed;
     CheckBox checkPressure;
     TextInputEditText editCity;
 
     SelectCity selectCity;
     CitiesFragment citiesFragment;
+
+    MenuBottom menuBottom;
+    MenuActionBar menuActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +38,8 @@ public class SelectCityActivity extends AppCompatActivity {
 
         selectCity = new SelectCity();
 
-        setContentView(R.layout.activity_select_city);
+        // setContentView(R.layout.activity_select_city);
+        setContentView(R.layout.activity_select_city_drawer); // активити с drawer
 
         checkWindSpeed = findViewById(R.id.select_city_check_wind_speed);
         checkPressure = findViewById(R.id.select_city_check_pressure);
@@ -45,10 +56,37 @@ public class SelectCityActivity extends AppCompatActivity {
         setSelectCity();
 
         // Обработчик BottomBar
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        navView.setOnNavigationItemSelectedListener(new BottomNavigation(this));
-
+        menuBottom = new MenuBottom(this);
+        menuActionBar = new MenuActionBar(this);
+        //Navigation Drawer — боковое навигационное меню приложения
+        new MenuDrawer(this);
     }
+
+    // Обработка события по ножатию кнопки возврата
+    // Если Drawer открыт то закрыть
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START))
+            drawer.closeDrawer(GravityCompat.START);
+        else
+            super.onBackPressed();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Здесь определяем меню приложения (активити)
+        menuActionBar.createMenu(menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Обработка выбора пункта меню приложения (активити)
+        //menuActionBar.selected(item);
+        return super.onOptionsItemSelected(item);
+    }
+
+
 
     private void setSelectCity() {
 
@@ -84,7 +122,7 @@ public class SelectCityActivity extends AppCompatActivity {
         findViewById(R.id.select_city_button_ok).setVisibility(View.GONE);
     }
 
-    public void returnMain(){
+    public void returnMain() {
         save();
 
         // Передача данных в main
@@ -94,6 +132,7 @@ public class SelectCityActivity extends AppCompatActivity {
 
         finish();
     }
+
     private void save() {
         selectCity.setPressure(checkPressure.isChecked());
         selectCity.setWindSpeed(checkWindSpeed.isChecked());
@@ -124,4 +163,12 @@ public class SelectCityActivity extends AppCompatActivity {
 
     }
 
+    public void updateSearch(String searchText) {
+        Log.i(TAG, searchText);
+        citiesFragment.updateCityList(searchText);
+    }
+
+    public void updateHistory() {
+        citiesFragment.updateHistory();
+    }
 }

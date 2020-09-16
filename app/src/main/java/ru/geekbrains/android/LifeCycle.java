@@ -1,14 +1,13 @@
 package ru.geekbrains.android;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class LifeCycle extends AppCompatActivity {
     private static final String TAG = "myLogs";
@@ -64,7 +63,7 @@ boolean flag;
     protected void onRestoreInstanceState(Bundle saveInstanceState){
         super.onRestoreInstanceState(saveInstanceState);
 
-        textView.setText(BaseVirtual.getCity());
+        textView.setText("onRestoreInstanceState");
         Toast.makeText(getApplicationContext(), "Повторный запуск!! - onRestoreInstanceState()", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "Повторный запуск!! - onRestoreInstanceState()");
     }
@@ -88,8 +87,6 @@ boolean flag;
     @Override
     protected void onSaveInstanceState(Bundle saveInstanceState){
         super.onSaveInstanceState(saveInstanceState);
-
-        BaseVirtual.setCity("Test = "+checkBox.isChecked());
         Toast.makeText(getApplicationContext(), "onSaveInstanceState()", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onSaveInstanceState()");
         logCheck();
