@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void setBtn() {
         onButtonClickedSelectCity();
-        onButtonClickedLifeCycle();
     }
 
     //SelectCity
@@ -123,17 +122,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //LifeCycle
-    private void onButtonClickedLifeCycle() {
-        findViewById(R.id.button_LifeCycle).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, LifeCycle.class));
-            }
-        });
-        // убрать кнопку
-        findViewById(R.id.button_LifeCycle).setVisibility(View.GONE);
-    }
 
 
     public void updateCityWeather(WeatherRequest cityWeather) {
