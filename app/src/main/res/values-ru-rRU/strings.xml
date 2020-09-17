@@ -23,6 +23,11 @@
     <string name="nav_menu_list_cities">Список городов</string>
     <string name="nav_menu_search_history">История</string>
 
+    <!-- AlertDialog -->
+    <string name="alert_dialog_title">Важное сообщение!</string>
+    <string name="alert_dialog_message">Не удалось получить данные с сервера!</string>
+    <string name="alert_dialog_button">OK</string>
+
     <string-array name="cities">
         <item>Москва</item>
         <item>Санкт-Петербург</item>
