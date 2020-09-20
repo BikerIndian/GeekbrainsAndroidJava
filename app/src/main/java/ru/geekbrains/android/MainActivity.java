@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -23,6 +24,7 @@ import java.util.Map;
 import ru.geekbrains.android.listDayOfWeek.DataDayOfWeek;
 import ru.geekbrains.android.listDayOfWeek.DayOfWeek;
 import ru.geekbrains.android.listDayOfWeek.ListDayOfWeekAdapter;
+import ru.geekbrains.android.network.IcoOpenWeather;
 import ru.geekbrains.android.network.Openweathermap;
 import ru.geekbrains.android.network.model.WeatherRequest;
 import ru.geekbrains.android.selectCity.SelectCity;
@@ -33,9 +35,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "WEATHER";
     private String DEFAULT_CITY = "Moscow";
     private SelectCity selectCity;
-    TextView city;
+    private TextView city;
     private TextView textTemp;
     private TextView textHumidity;
+    private ImageView imageWeatherCity;
     private Openweathermap apiServiceWeather;
 
 
@@ -50,9 +53,10 @@ public class MainActivity extends AppCompatActivity {
         city = findViewById(R.id.main_city);
         textTemp = findViewById(R.id.text_temp);
         textHumidity = findViewById(R.id.main_text_humidity);
+        imageWeatherCity = findViewById(R.id.mine_image_temp);
         Toolbar toolbar = findViewById(R.id.main_activity_toolbar);
         setSupportActionBar(toolbar);
-       // Log.d("myLogs", "onCreate");
+        // Log.d("myLogs", "onCreate");
 
         setBtn();
         this.selectCity = new SelectCity();
@@ -84,23 +88,24 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(itemDecoration);
 
     }
+
     public void updateCities(List<DayOfWeek> listDayOfWeek) {
         adapter.update(listDayOfWeek);
     }
 
 
     @Override
-    protected void onActivityResult( int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode != SelectCity.SELECT_CITY_REQUEST ) {
-            super .onActivityResult(requestCode, resultCode, data);
-            return ;
+        if (requestCode != SelectCity.SELECT_CITY_REQUEST) {
+            super.onActivityResult(requestCode, resultCode, data);
+            return;
         }
 
         if (resultCode == RESULT_OK) {
-            this.selectCity =  (SelectCity) data.getSerializableExtra(SelectCity.SELECT_CITY);
+            this.selectCity = (SelectCity) data.getSerializableExtra(SelectCity.SELECT_CITY);
             this.city.setText(this.selectCity.getCity());
-            Log.i("myLogs", "RESULT_OK: "+this.selectCity.getNum_city());
+            Log.i("myLogs", "RESULT_OK: " + this.selectCity.getNum_city());
             String cityENG = new CityENG(this).get(this.selectCity.getNum_city());
             apiServiceWeather.getCityWeather(cityENG);
         }
@@ -119,14 +124,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SelectCityActivity.class);
-                intent.putExtra(SelectCity.SELECT_CITY,selectCity);
+                intent.putExtra(SelectCity.SELECT_CITY, selectCity);
 
-                startActivityForResult(intent,SelectCity.SELECT_CITY_REQUEST);
+                startActivityForResult(intent, SelectCity.SELECT_CITY_REQUEST);
             }
         });
 
     }
-
 
 
     public void updateCityWeather(WeatherRequest cityWeather) {
@@ -135,18 +139,19 @@ public class MainActivity extends AppCompatActivity {
             showAlertDialog();
             return;
         }
-       textTemp.setText(String.format("%.0f°", cityWeather.getMain().getTemp()));
-        textHumidity.setText(""+cityWeather.getMain().getHumidity()+"%");
+        textTemp.setText(String.format("%.0f°", cityWeather.getMain().getTemp()));
+        textHumidity.setText("" + cityWeather.getMain().getHumidity() + "%");
+        imageWeatherCity.setImageResource(IcoOpenWeather.getIco(cityWeather.getWeather()[0].getIcon()));
         // Сохронение данных по городу
-        Map<String, BaseVirtual.WeatherCity> selectListCity =  BaseVirtual.getSelectListCity();
+        Map<String, BaseVirtual.WeatherCity> selectListCity = BaseVirtual.getSelectListCity();
 
         if (selectListCity.containsKey(city.getText())) {
             BaseVirtual.WeatherCity weatherCity = selectListCity.get(city.getText());
             weatherCity.setTemperature(cityWeather.getMain().getTemp());
         } else {
-            new BaseVirtual().setCity(city.getText().toString(),cityWeather.getMain().getTemp());
+            new BaseVirtual().setCity(city.getText().toString(), cityWeather.getMain().getTemp());
         }
-       // new BaseVirtual().setCity(city,num_city);
+        // new BaseVirtual().setCity(city,num_city);
     }
 
 
@@ -154,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
      * Предупреждение!
      * Не удалось получить данные с сервера!
      */
-    private void showAlertDialog(){
+    private void showAlertDialog() {
         int title = R.string.alert_dialog_title;
         int message = R.string.alert_dialog_message;
         int icon = R.mipmap.ic_alert_dialog;
@@ -175,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
                         // обработка нажатий
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                             //   Toast.makeText(MainActivity.this, "Кнопка нажата", Toast.LENGTH_SHORT).show();
+                                //   Toast.makeText(MainActivity.this, "Кнопка нажата", Toast.LENGTH_SHORT).show();
                             }
                         });
         AlertDialog alert = builder.create();
