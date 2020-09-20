@@ -42,7 +42,10 @@ public class Openweathermap {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        mainActivity.updateCityWeather(weatherRequest);
+                        // Проверка На тот случай, если Activity будет уничтожена.
+                        if (mainActivity != null) {
+                            mainActivity.updateCityWeather(weatherRequest);
+                        }
                     }
                 });
                 } catch (Exception e) {
