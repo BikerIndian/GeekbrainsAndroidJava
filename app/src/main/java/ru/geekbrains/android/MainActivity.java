@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private SelectCity selectCity;
     TextView city;
     private TextView textTemp;
+    private TextView textHumidity;
     private Openweathermap apiServiceWeather;
 
 
@@ -47,7 +49,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         city = findViewById(R.id.main_city);
         textTemp = findViewById(R.id.text_temp);
-
+        textHumidity = findViewById(R.id.main_text_humidity);
+        Toolbar toolbar = findViewById(R.id.main_activity_toolbar);
+        setSupportActionBar(toolbar);
        // Log.d("myLogs", "onCreate");
 
         setBtn();
@@ -132,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
        textTemp.setText(String.format("%.0f°", cityWeather.getMain().getTemp()));
-
+        textHumidity.setText(""+cityWeather.getMain().getHumidity()+"%");
         // Сохронение данных по городу
         Map<String, BaseVirtual.WeatherCity> selectListCity =  BaseVirtual.getSelectListCity();
 
