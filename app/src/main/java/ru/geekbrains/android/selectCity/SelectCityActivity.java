@@ -21,15 +21,15 @@ import ru.geekbrains.android.selectCity.menu.MenuDrawer;
 
 public class SelectCityActivity extends AppCompatActivity {
     private static final String TAG = "WEATHER";
-    CheckBox checkWindSpeed;
-    CheckBox checkPressure;
-    TextInputEditText editCity;
+    private CheckBox checkWindSpeed;
+    private CheckBox checkPressure;
+    private TextInputEditText editCity;
 
-    SelectCity selectCity;
-    CitiesFragment citiesFragment;
+    private SelectCity selectCity;
+    private CitiesFragment citiesFragment;
 
-    MenuBottom menuBottom;
-    MenuActionBar menuActionBar;
+    private MenuBottom menuBottom;
+    private MenuActionBar menuActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

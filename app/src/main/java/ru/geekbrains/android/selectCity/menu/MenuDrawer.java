@@ -47,13 +47,16 @@ public class MenuDrawer implements NavigationView.OnNavigationItemSelectedListen
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        // !!! switch не использовать так должен выполнится closeDrawer
-        if (id == R.id.nav_list_cities) {
-            activity.updateSearch("");
+        switch (id) {
+            case R.id.nav_list_cities:
+                activity.updateSearch("");
+                break;
+
+            case R.id.nav_history:
+                activity.updateHistory();
+                break;
         }
-        if (id == R.id.nav_history) {
-            activity.updateHistory();
-        }
+
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

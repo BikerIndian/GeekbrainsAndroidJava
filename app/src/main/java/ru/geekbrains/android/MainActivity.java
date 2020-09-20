@@ -1,5 +1,6 @@
 package ru.geekbrains.android;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -7,9 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -104,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void setBtn() {
         onButtonClickedSelectCity();
-        onButtonClickedLifeCycle();
     }
 
     //SelectCity
@@ -123,25 +123,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //LifeCycle
-    private void onButtonClickedLifeCycle() {
-        findViewById(R.id.button_LifeCycle).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, LifeCycle.class));
-            }
-        });
-        // убрать кнопку
-        findViewById(R.id.button_LifeCycle).setVisibility(View.GONE);
-    }
 
 
     public void updateCityWeather(WeatherRequest cityWeather) {
 
         if (cityWeather == null) {
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "Данные с сервера не пришли", Toast.LENGTH_SHORT);
-            toast.show();
+            showAlertDialog();
             return;
         }
        textTemp.setText(String.format("%.0f°", cityWeather.getMain().getTemp()));
@@ -156,5 +143,38 @@ public class MainActivity extends AppCompatActivity {
             new BaseVirtual().setCity(city.getText().toString(),cityWeather.getMain().getTemp());
         }
        // new BaseVirtual().setCity(city,num_city);
+    }
+
+
+    /**
+     * Предупреждение!
+     * Не удалось получить данные с сервера!
+     */
+    private void showAlertDialog(){
+        int title = R.string.alert_dialog_title;
+        int message = R.string.alert_dialog_message;
+        int icon = R.mipmap.ic_alert_dialog;
+        int button = R.string.alert_dialog_button;
+
+        // Создаем билдер и передаем контекст приложения
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        // в билдере указываем заголовок окна
+        builder.setTitle(title)
+                // указываем сообщение в окне
+                .setMessage(message)
+                // можно указать и пиктограмму
+                .setIcon(icon)
+                // из этого окна нельзя выйти кнопкой back
+                .setCancelable(false)
+                // устанавливаем кнопку
+                .setPositiveButton(button,
+                        // обработка нажатий
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                             //   Toast.makeText(MainActivity.this, "Кнопка нажата", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }
