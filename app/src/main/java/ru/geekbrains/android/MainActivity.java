@@ -25,8 +25,8 @@ import ru.geekbrains.android.listDayOfWeek.DataDayOfWeek;
 import ru.geekbrains.android.listDayOfWeek.DayOfWeek;
 import ru.geekbrains.android.listDayOfWeek.ListDayOfWeekAdapter;
 import ru.geekbrains.android.network.IcoOpenWeather;
-import ru.geekbrains.android.network.Openweathermap;
 import ru.geekbrains.android.network.model.WeatherRequest;
+import ru.geekbrains.android.network.retorfit.RetorfitUtil;
 import ru.geekbrains.android.selectCity.SelectCity;
 import ru.geekbrains.android.selectCity.SelectCityActivity;
 
@@ -39,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView textTemp;
     private TextView textHumidity;
     private ImageView imageWeatherCity;
-    private Openweathermap apiServiceWeather;
+    //private Openweathermap apiServiceWeather;
+    private RetorfitUtil retorfitUtil;
 
 
     // Адаптер для списка погоды на неделю
@@ -62,10 +63,12 @@ public class MainActivity extends AppCompatActivity {
         this.selectCity = new SelectCity();
 
         // Получаем данные о погоде с сервера
-        apiServiceWeather = new Openweathermap(this);
+        // apiServiceWeather = new Openweathermap(this);
+        retorfitUtil = new RetorfitUtil(this);
 
         if (savedInstanceState == null) {
-            apiServiceWeather.getCityWeather(DEFAULT_CITY);
+           // apiServiceWeather.getCityWeather(DEFAULT_CITY);
+            retorfitUtil.getCityWeather(DEFAULT_CITY);
         }
 
         initRecyclerView();
@@ -107,7 +110,8 @@ public class MainActivity extends AppCompatActivity {
             this.city.setText(this.selectCity.getCity());
             Log.i("myLogs", "RESULT_OK: " + this.selectCity.getNum_city());
             String cityENG = new CityENG(this).get(this.selectCity.getNum_city());
-            apiServiceWeather.getCityWeather(cityENG);
+            //apiServiceWeather.getCityWeather(cityENG);
+            retorfitUtil.getCityWeather(cityENG);
         }
 
     }
