@@ -26,6 +26,7 @@ import ru.geekbrains.android.listDayOfWeek.DayOfWeek;
 import ru.geekbrains.android.listDayOfWeek.ListDayOfWeekAdapter;
 import ru.geekbrains.android.network.IcoOpenWeather;
 import ru.geekbrains.android.network.model.WeatherRequest;
+import ru.geekbrains.android.network.picasso.ImageWeather;
 import ru.geekbrains.android.network.retorfit.RetorfitUtil;
 import ru.geekbrains.android.selectCity.SelectCity;
 import ru.geekbrains.android.selectCity.SelectCityActivity;
@@ -138,6 +139,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void updateCityWeather(WeatherRequest cityWeather) {
+        // Обновить фон
+        new ImageWeather().getFon((ImageView) findViewById(R.id.main_image_fon));
 
         if (cityWeather == null) {
             showAlertDialog();
