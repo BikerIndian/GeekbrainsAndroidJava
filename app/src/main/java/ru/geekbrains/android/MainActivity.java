@@ -21,13 +21,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import ru.geekbrains.android.listDayOfWeek.DataDayOfWeek;
 import ru.geekbrains.android.listDayOfWeek.DayOfWeek;
 import ru.geekbrains.android.listDayOfWeek.ListDayOfWeekAdapter;
 import ru.geekbrains.android.network.IcoOpenWeather;
 import ru.geekbrains.android.network.model.WeatherRequest;
 import ru.geekbrains.android.network.picasso.ImageWeather;
-import ru.geekbrains.android.network.retorfit.RetorfitUtil;
+import ru.geekbrains.android.network.retorfit.OpenWeather;
 import ru.geekbrains.android.selectCity.SelectCity;
 import ru.geekbrains.android.selectCity.SelectCityActivity;
 
@@ -65,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Получаем данные о погоде с сервера
         // apiServiceWeather = new Openweathermap(this);
-        retorfitUtil = new RetorfitUtil(this);
+        retorfitUtil = new RetorfitUtil();
 
         if (savedInstanceState == null) {
            // apiServiceWeather.getCityWeather(DEFAULT_CITY);
@@ -192,5 +197,40 @@ public class MainActivity extends AppCompatActivity {
                         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+
+    public class RetorfitUtil {
+        private OpenWeather openWeather;
+
+        public RetorfitUtil() {
+            initRetorfit();
+        }
+        private void initRetorfit() {
+            Retrofit retrofit;
+            retrofit = new Retrofit.Builder()
+                    .baseUrl("https://api.openweathermap.org/") //Базовая часть адреса
+                    .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необходимый для преобразования JSON'а в объекты
+                    .build();
+            openWeather = retrofit.create(OpenWeather.class); //Создаем объект, при помощи которого будем выполнять запросы
+        }
+
+        public void getCityWeather(String city) {
+            openWeather.loadWeather(city+",RU", BuildConfig.WEATHER_API_KEY)
+                    .enqueue(new Callback<WeatherRequest>() {
+                        @Override
+                        public void onResponse(Call<WeatherRequest> call, Response<WeatherRequest> response) {
+                            if (response.body() != null) {
+                                    MainActivity.this.updateCityWeather(response.body());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<WeatherRequest> call, Throwable t) {
+                            //  Log.e("WEATHER", "Error");
+                        }
+                    });
+
+        }
     }
 }
