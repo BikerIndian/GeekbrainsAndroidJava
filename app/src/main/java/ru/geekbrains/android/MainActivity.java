@@ -2,6 +2,7 @@ package ru.geekbrains.android;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,13 +45,13 @@ import ru.geekbrains.android.selectCity.SelectCityActivity;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "WEATHER";
+    private static final String KEY_SHARED_CITY_NAME = "city";
     private String DEFAULT_CITY = "Moscow";
     private SelectCity selectCity;
     private TextView city;
     private TextView textTemp;
     private TextView textHumidity;
     private ImageView imageWeatherCity;
-    //private Openweathermap apiServiceWeather;
     private RetorfitUtil retorfitUtil;
 
     private EducationSource educationSource; //DB
@@ -79,8 +80,11 @@ public class MainActivity extends AppCompatActivity {
         retorfitUtil = new RetorfitUtil();
 
         if (savedInstanceState == null) {
-           // apiServiceWeather.getCityWeather(DEFAULT_CITY);
-            retorfitUtil.getCityWeather(DEFAULT_CITY);
+            // Получаем город из файла
+            SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
+            String cityName = sharedPref.getString(KEY_SHARED_CITY_NAME,DEFAULT_CITY);
+            retorfitUtil.getCityWeather(cityName);
+            city.setText(cityName);
         }
 
         initRecyclerView();
@@ -193,8 +197,13 @@ public class MainActivity extends AppCompatActivity {
         historySearch.temperature = temperature;
         historySearch.humidity = ""+humidity;
 
-       educationSource.add(historySearch);
+        educationSource.add(historySearch);
 
+        // Сохраняем город в файл
+        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(KEY_SHARED_CITY_NAME, city.getText().toString());
+        editor.commit();
     }
 
 
