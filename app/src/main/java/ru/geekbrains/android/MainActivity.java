@@ -2,6 +2,7 @@ package ru.geekbrains.android;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,31 +19,42 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import ru.geekbrains.android.db.App;
+import ru.geekbrains.android.db.EducationDao;
+import ru.geekbrains.android.db.EducationSource;
+import ru.geekbrains.android.db.HistorySearch;
 import ru.geekbrains.android.listDayOfWeek.DataDayOfWeek;
 import ru.geekbrains.android.listDayOfWeek.DayOfWeek;
 import ru.geekbrains.android.listDayOfWeek.ListDayOfWeekAdapter;
 import ru.geekbrains.android.network.IcoOpenWeather;
 import ru.geekbrains.android.network.model.WeatherRequest;
 import ru.geekbrains.android.network.picasso.ImageWeather;
-import ru.geekbrains.android.network.retorfit.RetorfitUtil;
+import ru.geekbrains.android.network.retorfit.OpenWeather;
 import ru.geekbrains.android.selectCity.SelectCity;
 import ru.geekbrains.android.selectCity.SelectCityActivity;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "WEATHER";
+    private static final String KEY_SHARED_CITY_NAME = "city";
     private String DEFAULT_CITY = "Moscow";
     private SelectCity selectCity;
     private TextView city;
     private TextView textTemp;
     private TextView textHumidity;
     private ImageView imageWeatherCity;
-    //private Openweathermap apiServiceWeather;
     private RetorfitUtil retorfitUtil;
 
+    private EducationSource educationSource; //DB
 
     // Адаптер для списка погоды на неделю
     final ListDayOfWeekAdapter adapter = new ListDayOfWeekAdapter();
@@ -65,14 +77,27 @@ public class MainActivity extends AppCompatActivity {
 
         // Получаем данные о погоде с сервера
         // apiServiceWeather = new Openweathermap(this);
-        retorfitUtil = new RetorfitUtil(this);
+        retorfitUtil = new RetorfitUtil();
 
         if (savedInstanceState == null) {
-           // apiServiceWeather.getCityWeather(DEFAULT_CITY);
-            retorfitUtil.getCityWeather(DEFAULT_CITY);
+            // Получаем город из файла
+            SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
+            String cityName = sharedPref.getString(KEY_SHARED_CITY_NAME,DEFAULT_CITY);
+            retorfitUtil.getCityWeather(cityName);
+            city.setText(cityName);
         }
 
         initRecyclerView();
+
+        // База данных
+        initDB();
+    }
+
+    private void initDB() {
+        EducationDao educationDao = App
+                .getInstance()
+                .getEducationDao();
+        educationSource = new EducationSource(educationDao);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -108,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK) {
             this.selectCity = (SelectCity) data.getSerializableExtra(SelectCity.SELECT_CITY);
-            this.city.setText(this.selectCity.getCity());
+            this.city.setText(getResources().getStringArray(R.array.cities)[this.selectCity.getNum_city()]);
             Log.i("myLogs", "RESULT_OK: " + this.selectCity.getNum_city());
             String cityENG = new CityENG(this).get(this.selectCity.getNum_city());
             //apiServiceWeather.getCityWeather(cityENG);
@@ -146,10 +171,14 @@ public class MainActivity extends AppCompatActivity {
             showAlertDialog();
             return;
         }
-        textTemp.setText(String.format("%.0f°", cityWeather.getMain().getTemp()));
-        textHumidity.setText("" + cityWeather.getMain().getHumidity() + "%");
+        int temperature = Math.round(cityWeather.getMain().getTemp());
+        int humidity = cityWeather.getMain().getHumidity();
+
+        textTemp.setText(String.format("%d°", temperature));
+        textHumidity.setText(humidity + "%");
         imageWeatherCity.setImageResource(IcoOpenWeather.getIco(cityWeather.getWeather()[0].getIcon()));
         // Сохронение данных по городу
+        /*
         Map<String, BaseVirtual.WeatherCity> selectListCity = BaseVirtual.getSelectListCity();
 
         if (selectListCity.containsKey(city.getText())) {
@@ -158,8 +187,26 @@ public class MainActivity extends AppCompatActivity {
         } else {
             new BaseVirtual().setCity(city.getText().toString(), cityWeather.getMain().getTemp());
         }
-        // new BaseVirtual().setCity(city,num_city);
+        */
+        //db
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM");
+
+        HistorySearch historySearch = new HistorySearch();
+        historySearch.city = city.getText().toString();
+        historySearch.date  =  dateFormat.format(new Date());
+        historySearch.temperature = temperature;
+        historySearch.humidity = ""+humidity;
+
+        educationSource.add(historySearch);
+
+        // Сохраняем город в файл
+        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(KEY_SHARED_CITY_NAME, city.getText().toString());
+        editor.commit();
     }
+
+
 
 
     /**
@@ -192,5 +239,40 @@ public class MainActivity extends AppCompatActivity {
                         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+
+    public class RetorfitUtil {
+        private OpenWeather openWeather;
+
+        public RetorfitUtil() {
+            initRetorfit();
+        }
+        private void initRetorfit() {
+            Retrofit retrofit;
+            retrofit = new Retrofit.Builder()
+                    .baseUrl("https://api.openweathermap.org/") //Базовая часть адреса
+                    .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необходимый для преобразования JSON'а в объекты
+                    .build();
+            openWeather = retrofit.create(OpenWeather.class); //Создаем объект, при помощи которого будем выполнять запросы
+        }
+
+        public void getCityWeather(String city) {
+            openWeather.loadWeather(city+",RU", BuildConfig.WEATHER_API_KEY)
+                    .enqueue(new Callback<WeatherRequest>() {
+                        @Override
+                        public void onResponse(Call<WeatherRequest> call, Response<WeatherRequest> response) {
+                            if (response.body() != null) {
+                                    MainActivity.this.updateCityWeather(response.body());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<WeatherRequest> call, Throwable t) {
+                            //  Log.e("WEATHER", "Error");
+                        }
+                    });
+
+        }
     }
 }

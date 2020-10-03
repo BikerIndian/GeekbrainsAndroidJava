@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 public class ImageWeather {
+   private static List<String> urlList = new ArrayList();
     public void getFon(ImageView imageView){
         Picasso.get()
                 .load(getRandomUrl())
@@ -18,7 +19,7 @@ public class ImageWeather {
     }
 
     private String getRandomUrl() {
-        List<String> urlList = new ArrayList();
+
 
         urlList.add("https://images.unsplash.com/photo-1469829638725-69bf13ad6801?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60");
         urlList.add("https://images.unsplash.com/photo-1501588647130-2e99f4585623?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80");

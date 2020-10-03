@@ -11,18 +11,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import java.util.Map;
+import java.util.List;
 
-import ru.geekbrains.android.BaseVirtual;
 import ru.geekbrains.android.R;
+import ru.geekbrains.android.db.App;
+import ru.geekbrains.android.db.EducationDao;
+import ru.geekbrains.android.db.EducationSource;
+import ru.geekbrains.android.db.HistorySearch;
 
 // Фрагмент выбора города из списка
 public class CitiesFragment extends Fragment {
     public static final String CITY_ID = "ru.geekbrains.android.selectCity.CitiesFragment.city";
     public static final String NUM_CITY_ID = "ru.geekbrains.android.selectCity.CitiesFragment.num";
-    private String city="";
-    private int num_city=0;
+    private String city = "";
+    private int num_city = 0;
     private LinearLayout layoutView;
+
+    private EducationSource educationSource; //DB
 
     // При создании фрагмента укажем его макет
     @Override
@@ -35,18 +40,28 @@ public class CitiesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (savedInstanceState != null) {
-            city =  savedInstanceState.getString(CITY_ID);
-            num_city =  savedInstanceState.getInt(NUM_CITY_ID);
+            city = savedInstanceState.getString(CITY_ID);
+            num_city = savedInstanceState.getInt(NUM_CITY_ID);
         }
 
         initList(view);
+
+        // База данных
+        initDB();
+    }
+
+    private void initDB() {
+        EducationDao educationDao = App
+                .getInstance()
+                .getEducationDao();
+        educationSource = new EducationSource(educationDao);
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
 
         outState.putString(CITY_ID, city);
-        outState.putInt(NUM_CITY_ID,num_city);
+        outState.putInt(NUM_CITY_ID, num_city);
         super.onSaveInstanceState(outState);
     }
 
@@ -59,6 +74,7 @@ public class CitiesFragment extends Fragment {
 
     /**
      * Выводит список городов
+     *
      * @param searchCity
      */
     public void updateCityList(String searchCity) {
@@ -73,8 +89,8 @@ public class CitiesFragment extends Fragment {
         for (int i = 0; i < cities.length; i++) {
             String city = cities[i];
             // Добавление города в список
-            if (city.contains(searchCity) || searchCity.equals("") ) {
-                addCity(city,i);
+            if (city.contains(searchCity) || searchCity.equals("")) {
+                addCity(city, i);
             }
 
         }
@@ -107,7 +123,7 @@ public class CitiesFragment extends Fragment {
     private void save() {
         Bundle bundle = new Bundle();
         bundle.putString(CITY_ID, city);
-        bundle.putInt(NUM_CITY_ID,num_city);
+        bundle.putInt(NUM_CITY_ID, num_city);
         setArguments(bundle);
     }
 
@@ -116,6 +132,7 @@ public class CitiesFragment extends Fragment {
         // очистка всех элементов
         layoutView.removeAllViews();
 
+/*
         Map<String, BaseVirtual.WeatherCity> selectListCity =  BaseVirtual.getSelectListCity();
         for (Map.Entry<String, BaseVirtual.WeatherCity> entry : selectListCity.entrySet()) {
 
@@ -125,7 +142,15 @@ public class CitiesFragment extends Fragment {
             tv.setTextSize(30);
             layoutView.addView(tv);
         }
+*/
 
+        List<HistorySearch> listHistory = educationSource.getHistorySearches();
+        for (HistorySearch history : listHistory) {
+            TextView tv = new TextView(getContext());
+            tv.setText(String.format("%s %s %s°",history.date,history.city,history.temperature));
+            tv.setTextSize(25);
+            layoutView.addView(tv);
+        }
 
     }
 }
