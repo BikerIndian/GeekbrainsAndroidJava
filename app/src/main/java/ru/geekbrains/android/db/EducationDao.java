@@ -39,4 +39,7 @@ public interface EducationDao {
     @Query("SELECT COUNT() FROM historySearch")
     long getCount();
 
+    // Очистить таблицу
+    @Query("DELETE FROM historySearch")
+    void clear();
 }

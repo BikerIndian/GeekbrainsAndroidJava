@@ -15,6 +15,7 @@
 
     <string name="app_btn_select_city">выбрать город</string>
     <string name="select_city_search">поиск города</string>
+    <string name="select_city_btn_clear">Очистить историю</string>
 
 
     <!-- Navigation Drawer -->

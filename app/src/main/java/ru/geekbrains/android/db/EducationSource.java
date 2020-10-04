@@ -57,4 +57,10 @@ public class EducationSource {
         load();
     }
 
+    // Очистить
+    public void clear(){
+        educationDao.clear();
+        load();
+    }
+
 }

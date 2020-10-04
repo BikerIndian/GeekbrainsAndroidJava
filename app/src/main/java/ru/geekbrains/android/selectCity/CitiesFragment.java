@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import java.util.List;
@@ -26,6 +28,8 @@ public class CitiesFragment extends Fragment {
     private String city = "";
     private int num_city = 0;
     private LinearLayout layoutView;
+    private ConstraintLayout constraintLayout;
+    private Button btmClear;
 
     private EducationSource educationSource; //DB
 
@@ -44,13 +48,30 @@ public class CitiesFragment extends Fragment {
             num_city = savedInstanceState.getInt(NUM_CITY_ID);
         }
 
-        initList(view);
-
         // База данных
         initDB();
+
+        constraintLayout = (ConstraintLayout) view;
+        initBtm(constraintLayout);
+        initList(constraintLayout);
+
+
+    }
+
+    private void initBtm(View view) {
+        btmClear = view.findViewById(R.id.select_city_button_clear);
+        btmClear.setVisibility(View.GONE);
+        btmClear.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                educationSource.clear();
+                updateHistory();
+            }
+        }));
     }
 
     private void initDB() {
+
         EducationDao educationDao = App
                 .getInstance()
                 .getEducationDao();
@@ -67,7 +88,8 @@ public class CitiesFragment extends Fragment {
 
     // создаем список городов на экране из массива в ресурсах
     private void initList(View view) {
-        layoutView = (LinearLayout) view;
+        layoutView = view.findViewById(R.id.select_city_list);
+        //layoutViewCore = (LinearLayout) view;
         updateCityList("");
     }
 
@@ -78,8 +100,12 @@ public class CitiesFragment extends Fragment {
      * @param searchCity
      */
     public void updateCityList(String searchCity) {
+        //Скрыть кнопку
+        btmClear.setVisibility(View.GONE);
+
+        //btmClear.setVisibility(View.VISIBLE);
         // очистка всех элементов
-        layoutView.removeAllViews();
+        //layoutView.removeAllViews();
         String[] cities = getResources().getStringArray(R.array.cities);
 
         // В этом цикле создаем элемент TextView,
@@ -129,6 +155,8 @@ public class CitiesFragment extends Fragment {
 
 
     public void updateHistory() {
+        //Показать кнопку
+        btmClear.setVisibility(View.VISIBLE);
         // очистка всех элементов
         layoutView.removeAllViews();
 
