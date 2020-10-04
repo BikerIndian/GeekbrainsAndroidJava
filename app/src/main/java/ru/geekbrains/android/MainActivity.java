@@ -1,7 +1,9 @@
 package ru.geekbrains.android;
 
+import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,6 +30,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import ru.geekbrains.android.broadcast.BatteryInfoReceiver;
+import ru.geekbrains.android.broadcast.NetworkInfoReceiver;
 import ru.geekbrains.android.db.App;
 import ru.geekbrains.android.db.EducationDao;
 import ru.geekbrains.android.db.EducationSource;
@@ -58,6 +62,11 @@ public class MainActivity extends AppCompatActivity {
 
     // Адаптер для списка погоды на неделю
     final ListDayOfWeekAdapter adapter = new ListDayOfWeekAdapter();
+
+    // Сообщение об уровне
+    // заряда батареи в вашем приложении.
+    private BroadcastReceiver batteryInfoReceiver = new BatteryInfoReceiver();
+    private BroadcastReceiver networkInfoReceiver = new NetworkInfoReceiver();
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -91,6 +100,18 @@ public class MainActivity extends AppCompatActivity {
 
         // База данных
         initDB();
+
+        // регистрация ресивера
+       registerReceiver();
+    }
+
+    private void registerReceiver() {
+        // контроль заряда батареи
+        registerReceiver(batteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_LOW));
+
+        // контроль подключения к сети
+        registerReceiver(networkInfoReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+
     }
 
     private void initDB() {
@@ -241,6 +262,13 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(batteryInfoReceiver);
+        unregisterReceiver(networkInfoReceiver);
+
+    }
 
     public class RetorfitUtil {
         private OpenWeather openWeather;

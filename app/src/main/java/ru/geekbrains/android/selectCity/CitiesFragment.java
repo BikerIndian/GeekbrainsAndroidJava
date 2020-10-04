@@ -105,7 +105,7 @@ public class CitiesFragment extends Fragment {
 
         //btmClear.setVisibility(View.VISIBLE);
         // очистка всех элементов
-        //layoutView.removeAllViews();
+        layoutView.removeAllViews();
         String[] cities = getResources().getStringArray(R.array.cities);
 
         // В этом цикле создаем элемент TextView,
