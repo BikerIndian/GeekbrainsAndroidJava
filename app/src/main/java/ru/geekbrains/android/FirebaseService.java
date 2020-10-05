@@ -6,7 +6,6 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -15,12 +14,11 @@ public class FirebaseService extends FirebaseMessagingService {
 
     private  String TAG = "PushMessageAndroid";
     public FirebaseService() {
-        Log.d(TAG, "FirebaseMessaging =" + FirebaseMessaging.getInstance().getToken().toString());
     }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.d(TAG, remoteMessage.getNotification().getBody());
+        Log.i(TAG, "Message: " + remoteMessage.getNotification().getBody());
         String title = remoteMessage.getNotification().getTitle();
         if (title == null){
             title = "Push Message";
@@ -35,13 +33,12 @@ public class FirebaseService extends FirebaseMessagingService {
                 (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(messageId++, builder.build());
     }
-
     @Override
     public void onNewToken(String token) {
         // Если надо посылать сообщения этому экземпляру приложения
         // или управлять подписками прилоения на стороне сервера,
         // сохраните этот токен в базе данных. отправьте этот токен вашему
-        Log.d(TAG, "Token " + token);
+        Log.i(TAG, "onNewToken: " + token);
         sendRegistrationToServer(token);
     }
 

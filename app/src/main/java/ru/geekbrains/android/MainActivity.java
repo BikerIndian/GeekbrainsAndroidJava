@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +21,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -91,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Получаем город из файла
             SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
-            String cityName = sharedPref.getString(KEY_SHARED_CITY_NAME,DEFAULT_CITY);
+            String cityName = sharedPref.getString(KEY_SHARED_CITY_NAME, DEFAULT_CITY);
             retorfitUtil.getCityWeather(cityName);
             city.setText(cityName);
         }
@@ -102,7 +108,28 @@ public class MainActivity extends AppCompatActivity {
         initDB();
 
         // регистрация ресивера
-       registerReceiver();
+        registerReceiver();
+
+        //FirebaseService
+        initGetToken();
+    }
+
+    private void initGetToken() {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.i("PushMessageAndroid", "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+                        Log.i("PushMessageAndroid", "Token: " + token);
+
+                    }
+                });
     }
 
     private void registerReceiver() {
@@ -214,9 +241,9 @@ public class MainActivity extends AppCompatActivity {
 
         HistorySearch historySearch = new HistorySearch();
         historySearch.city = city.getText().toString();
-        historySearch.date  =  dateFormat.format(new Date());
+        historySearch.date = dateFormat.format(new Date());
         historySearch.temperature = temperature;
-        historySearch.humidity = ""+humidity;
+        historySearch.humidity = "" + humidity;
 
         educationSource.add(historySearch);
 
@@ -226,8 +253,6 @@ public class MainActivity extends AppCompatActivity {
         editor.putString(KEY_SHARED_CITY_NAME, city.getText().toString());
         editor.commit();
     }
-
-
 
 
     /**
@@ -276,6 +301,7 @@ public class MainActivity extends AppCompatActivity {
         public RetorfitUtil() {
             initRetorfit();
         }
+
         private void initRetorfit() {
             Retrofit retrofit;
             retrofit = new Retrofit.Builder()
@@ -286,12 +312,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void getCityWeather(String city) {
-            openWeather.loadWeather(city+",RU", BuildConfig.WEATHER_API_KEY)
+            openWeather.loadWeather(city + ",RU", BuildConfig.WEATHER_API_KEY)
                     .enqueue(new Callback<WeatherRequest>() {
                         @Override
                         public void onResponse(Call<WeatherRequest> call, Response<WeatherRequest> response) {
                             if (response.body() != null) {
-                                    MainActivity.this.updateCityWeather(response.body());
+                                MainActivity.this.updateCityWeather(response.body());
                             }
                         }
 
