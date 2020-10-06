@@ -1,7 +1,9 @@
 package ru.geekbrains.android;
 
+import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +21,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,6 +36,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import ru.geekbrains.android.broadcast.BatteryInfoReceiver;
+import ru.geekbrains.android.broadcast.NetworkInfoReceiver;
 import ru.geekbrains.android.db.App;
 import ru.geekbrains.android.db.EducationDao;
 import ru.geekbrains.android.db.EducationSource;
@@ -59,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
     // Адаптер для списка погоды на неделю
     final ListDayOfWeekAdapter adapter = new ListDayOfWeekAdapter();
 
+    // Сообщение об уровне
+    // заряда батареи в вашем приложении.
+    private BroadcastReceiver batteryInfoReceiver = new BatteryInfoReceiver();
+    private BroadcastReceiver networkInfoReceiver = new NetworkInfoReceiver();
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Получаем город из файла
             SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
-            String cityName = sharedPref.getString(KEY_SHARED_CITY_NAME,DEFAULT_CITY);
+            String cityName = sharedPref.getString(KEY_SHARED_CITY_NAME, DEFAULT_CITY);
             retorfitUtil.getCityWeather(cityName);
             city.setText(cityName);
         }
@@ -91,6 +106,39 @@ public class MainActivity extends AppCompatActivity {
 
         // База данных
         initDB();
+
+        // регистрация ресивера
+        registerReceiver();
+
+        //FirebaseService
+        initGetToken();
+    }
+
+    private void initGetToken() {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.i("PushMessageAndroid", "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+                        Log.i("PushMessageAndroid", "Token: " + token);
+
+                    }
+                });
+    }
+
+    private void registerReceiver() {
+        // контроль заряда батареи
+        registerReceiver(batteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_LOW));
+
+        // контроль подключения к сети
+        registerReceiver(networkInfoReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+
     }
 
     private void initDB() {
@@ -193,9 +241,9 @@ public class MainActivity extends AppCompatActivity {
 
         HistorySearch historySearch = new HistorySearch();
         historySearch.city = city.getText().toString();
-        historySearch.date  =  dateFormat.format(new Date());
+        historySearch.date = dateFormat.format(new Date());
         historySearch.temperature = temperature;
-        historySearch.humidity = ""+humidity;
+        historySearch.humidity = "" + humidity;
 
         educationSource.add(historySearch);
 
@@ -205,8 +253,6 @@ public class MainActivity extends AppCompatActivity {
         editor.putString(KEY_SHARED_CITY_NAME, city.getText().toString());
         editor.commit();
     }
-
-
 
 
     /**
@@ -241,6 +287,13 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(batteryInfoReceiver);
+        unregisterReceiver(networkInfoReceiver);
+
+    }
 
     public class RetorfitUtil {
         private OpenWeather openWeather;
@@ -248,6 +301,7 @@ public class MainActivity extends AppCompatActivity {
         public RetorfitUtil() {
             initRetorfit();
         }
+
         private void initRetorfit() {
             Retrofit retrofit;
             retrofit = new Retrofit.Builder()
@@ -258,12 +312,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void getCityWeather(String city) {
-            openWeather.loadWeather(city+",RU", BuildConfig.WEATHER_API_KEY)
+            openWeather.loadWeather(city + ",RU", BuildConfig.WEATHER_API_KEY)
                     .enqueue(new Callback<WeatherRequest>() {
                         @Override
                         public void onResponse(Call<WeatherRequest> call, Response<WeatherRequest> response) {
                             if (response.body() != null) {
-                                    MainActivity.this.updateCityWeather(response.body());
+                                MainActivity.this.updateCityWeather(response.body());
                             }
                         }
 

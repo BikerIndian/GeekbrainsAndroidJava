@@ -14,6 +14,7 @@
 
     <string name="app_btn_select_city">select sity</string>
     <string name="select_city_search">city search</string>
+    <string name="select_city_btn_clear">Clear history</string>
 
     <!-- Navigation Drawer -->
     <string name="nav_header_title">Vladimir Svishch</string>
@@ -26,6 +27,10 @@
     <string name="alert_dialog_message">Failed to get data from server!</string>
     <string name="alert_dialog_button">OK</string>
 
+    <!-- BroadcastReceiver -->
+    <string name="broadcast_connect_on">Network ON</string>
+    <string name="broadcast_connect_off">Network OFF</string>
+    <string name="broadcast_battery_low">BATTERY LOW</string>
 
     <string-array name="cities">
         <item>Moscow</item>

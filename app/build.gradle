@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
@@ -16,7 +17,7 @@ android {
     buildTypes.each {
         Properties properties = new Properties()
         properties.load(project.rootProject.file("apikey.properties").newDataInputStream())
-        def weatherApiKey  = properties.getProperty("weather_api_key", "")
+        def weatherApiKey = properties.getProperty("weather_api_key", "")
         it.buildConfigField "String", "WEATHER_API_KEY", weatherApiKey
     }
 
@@ -35,6 +36,7 @@ dependencies {
 
     implementation 'com.android.support.constraint:constraint-layout:2.0.1'
 
+    implementation 'com.google.firebase:firebase-messaging:20.3.0'
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

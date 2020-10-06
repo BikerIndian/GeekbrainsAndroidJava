@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "439674007302",
+    "firebase_url": "https://geekbrainsandroid.firebaseio.com",
+    "project_id": "geekbrainsandroid",
+    "storage_bucket": "geekbrainsandroid.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439674007302:android:460bc023483722c1c57887",
+        "android_client_info": {
+          "package_name": "ru.geekbrains.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "439674007302-4ug0n38nh5dv3d9rvjtn217ltoqi5nnl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZW_lhh5RU0dhzlZpGjIVEVKuuWRGh3pc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "439674007302-4ug0n38nh5dv3d9rvjtn217ltoqi5nnl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
