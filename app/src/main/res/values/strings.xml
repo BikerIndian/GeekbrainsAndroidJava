@@ -5,6 +5,7 @@
     <string name="app_temp">Temperature:</string>
     <string name="app_wind_speed">wind speed</string>
     <string name="app_pressure">pressure</string>
+    <string name="app_btn_get_weather">get weather</string>
 
     <string name="app_city_Moscow">Moscow</string>
     <string name="app_city_London">London</string>
