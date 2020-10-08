@@ -1,5 +1,5 @@
 package ru.geekbrains.android.network.model;
-
+// info: https://openweathermap.org/stations
 public class WeatherRequest {
     private Coord coord;
     private Weather[] weather;
@@ -7,6 +7,7 @@ public class WeatherRequest {
     private Wind wind;
     private Clouds clouds;
     private String name;
+    private Rain rain;
 
     public Coord getCoord() {
         return coord;
@@ -57,5 +58,9 @@ public class WeatherRequest {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Rain getRain() {
+        return rain;
     }
 }

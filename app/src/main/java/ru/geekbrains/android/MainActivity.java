@@ -1,12 +1,16 @@
 package ru.geekbrains.android;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -27,6 +31,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -86,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver networkInfoReceiver = new NetworkInfoReceiver();
 
     private GoogleMaps googleMaps;
+    private NotificationMessage notificationMessage;
+    private AlertWeather alertWeather;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -127,6 +134,9 @@ public class MainActivity extends AppCompatActivity {
         initGetToken();
 
         googleMaps = new GoogleMaps();
+        notificationMessage = new NotificationMessage();
+        alertWeather = new AlertWeather();
+
     }
 
     // Firebase
@@ -280,6 +290,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(KEY_SHARED_CITY_NAME, city.getText().toString());
         editor.commit();
+
+        alertWeather.check(cityWeather);
     }
 
 
@@ -333,6 +345,10 @@ public class MainActivity extends AppCompatActivity {
         return retorfitUtil;
     }
 
+    public NotificationMessage getNotificationMessage() {
+        return notificationMessage;
+    }
+
     public class RetorfitUtil {
         private OpenWeather openWeather;
 
@@ -370,7 +386,7 @@ public class MainActivity extends AppCompatActivity {
         // Обновляем погоду по координатам
         //api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
         public void getWeatherLatLon(double lat, double lon) {
-            openWeather.loadWeatherLatLon(lat,lon, BuildConfig.WEATHER_API_KEY)
+            openWeather.loadWeatherLatLon(lat, lon, BuildConfig.WEATHER_API_KEY)
                     .enqueue(new Callback<WeatherRequest>() {
                         @Override
                         public void onResponse(Call<WeatherRequest> call, Response<WeatherRequest> response) {
@@ -381,7 +397,7 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<WeatherRequest> call, Throwable t) {
-                              Log.e("GoogleMaps", "Error getWeatherLatLon(double lat, double lon)");
+                            Log.e("GoogleMaps", "Error getWeatherLatLon(double lat, double lon)");
                         }
                     });
 
@@ -443,7 +459,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.i(TAG, "Longitude: " + longitude);
 
                     // Обновляем погоду по координатам
-                    MainActivity.this.getRetorfitUtil().getWeatherLatLon(lat,lng);
+                    MainActivity.this.getRetorfitUtil().getWeatherLatLon(lat, lng);
                     getAddress(new LatLng(lat, lng));
                 }
 
@@ -528,4 +544,104 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     } // end GoogleMaps
+
+    // Вывод сообщений пользователю
+    private class NotificationMessage {
+        private final static String NOTIFICATION_ID = "2";
+        private String channelName = getString(R.string.app_name);
+        private Context context = MainActivity.this;
+
+        public NotificationMessage() {
+            init();
+        }
+
+        private void init() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                int importance = NotificationManager.IMPORTANCE_LOW;
+                NotificationChannel channel = new NotificationChannel(NOTIFICATION_ID, channelName, importance);
+                //channel.setDescription("My channel description");
+                channel.enableLights(true);
+                channel.setLightColor(Color.RED);
+                channel.enableVibration(false);
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+
+        public void send(String mess) {
+
+            // создать нотификацию
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "2")
+                    .setSmallIcon(R.drawable.ic_stat_alert)
+                    //.setContentTitle("Broadcast Receiver")
+                    .setContentText(mess);
+            NotificationManager notificationManager =
+                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            //notificationManager.notify(messageId++, builder.build());
+            notificationManager.notify(0, builder.build());
+        }
+    }
+
+    // Отправить сообщение, при опасных погодных явлений
+    private class AlertWeather {
+        private String TAG = "AlertWeather";
+        private String messageAlarm = "";
+        private WeatherRequest cityWeather;
+
+        // Оасные параметры погоды
+        private float maxHourRain = 15f;        // mm осадков - Дождь
+        private float maxSpeedWind = 14f;       // Ветер
+
+        public void check(WeatherRequest cityWeather) {
+            this.cityWeather = cityWeather;
+            Log.i(TAG, "check");
+
+
+            if (isMaxHourRain()) {
+                String messRain = getString(R.string.alert_weather_max_hour_rain)+"\n";
+                messageAlarm +=messRain;
+            }
+
+            if (isMaxSpeedWind()) {
+                String messSpeedWind = getString(R.string.alert_weather_max_speed_wind)+"\n";
+                messageAlarm+=messSpeedWind;
+            }
+
+            sendMess();
+        }
+
+        private void sendMess() {
+            if (isMaxHourRain() || isMaxSpeedWind()) {
+                getNotificationMessage().send(messageAlarm);
+            }
+        }
+
+        private boolean isMaxHourRain() {
+            float hourRain = 0;
+            if (cityWeather.getRain() != null) {
+                hourRain = cityWeather.getRain().getHour();
+                Log.i(TAG, "hourRain = " + hourRain);
+            }
+
+            if (maxHourRain < hourRain) {
+                return true;
+            }
+            return false;
+        }
+
+        private boolean isMaxSpeedWind() {
+            float speedWind = 0;
+            // wind скорость ветра > 25 метров /c
+            if (cityWeather.getWind() != null) {
+                speedWind = cityWeather.getWind().getSpeed();
+                Log.i(TAG, "speedWind = " + speedWind);
+            }
+            if (maxSpeedWind < speedWind) {
+                return true;
+            }
+            return false;
+        }
+
+    }
+
 }

@@ -35,6 +35,10 @@
     <string name="broadcast_connect_off">Сеть отключена</string>
     <string name="broadcast_battery_low">Низкий заряд батареи</string>
 
+    <!-- AlertWeather -->
+    <string name="alert_weather_max_hour_rain">Ливень</string>
+    <string name="alert_weather_max_speed_wind">Сильный ветер</string>
+
     <string-array name="cities">
         <item>Москва</item>
         <item>Санкт-Петербург</item>
