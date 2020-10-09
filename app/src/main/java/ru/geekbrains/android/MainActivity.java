@@ -528,7 +528,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                         removeUpdates(); // удаляем листнер
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Log.i(TAG, "Error getAddress: " +  e.getMessage());
                     }
                 }
             }).start();
