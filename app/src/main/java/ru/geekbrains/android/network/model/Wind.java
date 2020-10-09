@@ -1,8 +1,8 @@
 package ru.geekbrains.android.network.model;
 
 public class Wind {
-    private float speed;
-    private int deg;
+    private float speed;    // Максимальная скорость порывов ветра
+    private int deg;        // Направление ветра 360
 
     public int getDeg() {
         return deg;

@@ -5,6 +5,7 @@
     <string name="app_temp">Temperature:</string>
     <string name="app_wind_speed">wind speed</string>
     <string name="app_pressure">pressure</string>
+    <string name="app_btn_get_weather">get weather</string>
 
     <string name="app_city_Moscow">Moscow</string>
     <string name="app_city_London">London</string>
@@ -31,6 +32,10 @@
     <string name="broadcast_connect_on">Network ON</string>
     <string name="broadcast_connect_off">Network OFF</string>
     <string name="broadcast_battery_low">BATTERY LOW</string>
+
+    <!-- AlertWeather -->
+    <string name="alert_weather_max_hour_rain">Downpour</string>
+    <string name="alert_weather_max_speed_wind">Strong wind</string>
 
     <string-array name="cities">
         <item>Moscow</item>
