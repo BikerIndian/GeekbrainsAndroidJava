@@ -34,6 +34,8 @@
     <string name="broadcast_connect_on">Сеть подключена</string>
     <string name="broadcast_connect_off">Сеть отключена</string>
     <string name="broadcast_battery_low">Низкий заряд батареи</string>
+    <string name="nav_menu_auth_in">Войти</string>
+    <string name="nav_menu_auth_out">Выйти</string>
 
     <!-- AlertWeather -->
     <string name="alert_weather_max_hour_rain">Ливень</string>

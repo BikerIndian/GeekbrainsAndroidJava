@@ -12,7 +12,22 @@
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_btn_ok"
             android:title="@string/nav_menu_search_history" />
+
     </group>
+    <item android:title="Authorization">
+        <menu>
+            <item
+                android:id="@+id/nav_auth_in"
+                android:icon="@drawable/ic_nav_auth"
+                android:title="@string/nav_menu_auth_in"
+                android:visible="true" />
+            <item
+                android:id="@+id/nav_auth_out"
+                android:icon="@drawable/ic_nav_auth"
+                android:title="@string/nav_menu_auth_out"
+                android:visible="false" />
+        </menu>
+    </item>
 
 
 </menu>

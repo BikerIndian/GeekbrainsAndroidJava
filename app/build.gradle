@@ -26,6 +26,22 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            //applicationIdSuffix '.debug'
+        }
+    }
+    flavorDimensions 'version'
+    productFlavors {
+        onLocation {
+            dimension 'version'
+            versionNameSuffix = '.onLocation'
+            versionNameSuffix = '.onLocation'
+        }
+        offLocation {
+            dimension 'version'
+            versionNameSuffix = '.offLocation'
+            versionNameSuffix = '.offLocation'
+        }
     }
 }
 
@@ -56,4 +72,7 @@ dependencies {
 
     // Google Maps API
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
+    // Google Auth API
+    implementation 'com.google.android.gms:play-services-auth:18.1.0'
 }

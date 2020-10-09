@@ -67,9 +67,9 @@ import ru.geekbrains.android.network.picasso.ImageWeather;
 import ru.geekbrains.android.network.retorfit.OpenWeather;
 import ru.geekbrains.android.selectCity.SelectCity;
 import ru.geekbrains.android.selectCity.SelectCityActivity;
-
 public class MainActivity extends AppCompatActivity {
 
+    private static final String WEATHER_API_KEY = BuildConfig.WEATHER_API_KEY;
     private static final String TAG = "WEATHER";
     private static final String KEY_SHARED_CITY_NAME = "city";
     private String DEFAULT_CITY = "Moscow";
@@ -366,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void getCityWeather(String city) {
-            openWeather.loadWeather(city + ",RU", BuildConfig.WEATHER_API_KEY)
+            openWeather.loadWeather(city + ",RU", WEATHER_API_KEY)
                     .enqueue(new Callback<WeatherRequest>() {
                         @Override
                         public void onResponse(Call<WeatherRequest> call, Response<WeatherRequest> response) {
@@ -386,7 +386,7 @@ public class MainActivity extends AppCompatActivity {
         // Обновляем погоду по координатам
         //api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
         public void getWeatherLatLon(double lat, double lon) {
-            openWeather.loadWeatherLatLon(lat, lon, BuildConfig.WEATHER_API_KEY)
+            openWeather.loadWeatherLatLon(lat, lon, WEATHER_API_KEY)
                     .enqueue(new Callback<WeatherRequest>() {
                         @Override
                         public void onResponse(Call<WeatherRequest> call, Response<WeatherRequest> response) {
